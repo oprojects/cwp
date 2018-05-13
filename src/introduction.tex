@@ -1,0 +1,72 @@
+% ---------------------------------------------------
+% CHAPTER SUMMARY MESSAGE:  We want to identify the science drivers and the primary goals
+% and key areas for using ML
+% ---------------------------------------------------
+
+
+%As particle physics enters the post-Higgs boson discovery era, one of the main objectives is
+
+The main objectives of particle physics in the post-Higgs boson discovery era is to exploit
+the full physics potential of the Large Hadron Collider (LHC) and its upgrade, the high luminosity LHC (HL-LHC), and present and future neutrino experiments. The HL-LHC will deliver data from 100 times the luminosity compared to the LHC, bringing quantitatively and qualitatively new challenges due to event size, data volume, and complexity. The physics reach of the experiments will be limited by the physics performance of algorithms and computational resources. Machine learning (ML) applied to particle physics promises to provide improvements in both of these areas.
+
+Incorporating machine learning in particle physics workflows will require significant research and development over the next five years. Areas where significant improvements are needed include:
+\begin{itemize}
+ \item {\bf Physics performance} of reconstruction and analysis algorithms;
+ \item {\bf Execution time} of computationally expensive parts of event simulation, pattern recognition, and calibration;
+ \item {\bf Realtime implementation} of machine learning algorithms;
+ \item {\bf Reduction of the data footprint} with data compression, placement and access.
+\end{itemize}
+\noindent
+
+\subsection{Motivation}
+The experimental high-energy physics (HEP) program revolves around two main objectives: probing the Standard Model (SM) with increasing precision and searching for new physics. Both tasks require the identification of rare signals in immense backgrounds. Substantially increased levels of pile-up at the HL-LHC will make this a significant challenge.
+
+%Machine learning community benefits from rapid development and experimentation. Modern machine-learning tools are themselves undergoing a process of rapid evolution. Noteworthy are the recent machine-learning tools originating from industry. The HEP community can benefit from these advancements by developing flexible software and workflows. A major challenge is how to engage the ML community and maximally benefit from these developments. Common to the HEP and ML communities is the desire to interpret machine learning models \cite{interpretability}.
+
+Machine learning algorithms are already the state-of-the-art in event and particle identification, energy estimation and pile-up suppression applications in HEP. Despite their present advantage, machine-learning algorithms still have significant room for improvement in their exploitation of the full potential of data.
+
+% an open area of research expected to require a substantial R\&D  effort. %ML developments for HEP are likely to have applications for other scientific domains which are similarly exposed to large amounts of data.
+
+\subsection{Brief Overview of Machine Learning Algorithms in HEP}
+
+This section provides a brief introduction to the most important machine learning algorithms in HEP, introducing key vocabulary (in {\it italic}).
+
+%Specific application areas of machine learning in HEP are detailed in Chapter ~\ref{sec:applications}.
+
+Machine learning methods are designed to exploit large datasets in order to reduce complexity and find new features in data. The most frequently used machine learning algorithms in HEP are Boosted Decision Trees (BDTs) and Neural Networks (NN).
+
+%\textcolor{red}{DR: PROBABLY NEED DIAGRAMS}
+Typically, variables relevant to the physics problem are selected and a machine learning {\it model} is {\it trained} for {\it classification or regression} using signal and background events (or {\it instances}). Training the model is the most human- and CPU- time consuming, while the application, the so called {\it inference} stage, is relatively inexpensive. BDTs and NNs are typically used to classify particles and events. They are also used for {\it regression}, where a continuous function is learned, for example to obtain the best estimate of particle's energy based on the measurements from several detectors.
+
+Neural Networks have been used in HEP for some time; however, improvements in training algorithms and computing power have led in the last decade to the so-called Deep Learning
+revolution, which has made a significant impact on HEP. Deep Learning is particularly promising when there is a large amount of data and features, as well as symmetries and complex non-linear dependencies between inputs and outputs.
+
+There are different types of deep neural networks used in HEP: fully-connected (FCN), convolutional (CNN) and recurrent (RNN). Additionally, neural networks are used in the context of Generative Models, when a Neural Network is trained to mimic multidimensional distributions to generate any number of new instances. Variational AutoEncoders (VAE) and more recent Generative Adversarial Networks (GAN) are two examples of such generative models used in HEP.
+
+A large set of Machine Learning algorithms are devoted to time series analysis and prediction. They are in general not relevant for HEP where events are independent from each other. However, there is more and more interest in these algorithms for Data Quality and Computing Infrastructure monitoring, as well as those physics processes and event reconstruction tasks where time is an important dimension.
+
+
+\subsection{Structure of the Document}
+
+%With many machine learning tools available and a long standing tradition of homegrown HEP software,
+
+Applications of machine learning algorithms motivated by HEP drivers are detailed in Section \ref{sec:applications}. Section \ref{sec:software} focuses on the machine learning software in HEP and discusses the interplay between internally and externally developed machine learning tools. Recent progress in machine learning was made possible in part by emergence of suitable hardware for training complex models. In Section \ref{sec:resources}, the resource requirements of training and applying machine learning algorithms in HEP are discussed. Section \ref{sec:training} discusses ways of training the HEP community in machine learning, while Section \ref{sec:collaboration} focuses on outreach and collaboration with the machine learning community. Finally, Section \ref{sec:roadmap} presents the roadmap for the near future.
+
+%Defining the best algorithms for the challenges that will be faced (section \ref{sec:applications}), their software implementation in production framework (section \ref{sec:software}), the computing resource needs (section \ref{sec:resources}), reaching out efficiently to the data science community (section \ref{sec:bridges}) and educating HEP researcher on these new technique (section \ref{sec:training}).
+
+%Many of the topics that will require work in the coming years are also addressed in several other sections of the CWP, mostly data management, work-flow management, framework, computing model, training, and software integration.
+
+
+
+
+
+
+
+%\subsection{Machine Learning and High-Energy Physics}
+
+%Efforts are underway to bring together HEP and ML experts but more work is needed to bring the two communities together.
+
+%The applications described are relevant beyond the LHC experiments and have been used and achieved ground-breaking potential in neutrino physics.
+%the specific requirements of training large models over large datasets.% In particular the R\&D required for efficient inference in production environment.
+%Even though applying most ML techniques does not require external expertise when the problems are simple, some of the challenges exposed in this document are very specific to the field of HEP and will require significant R\&D in the methods themselves.
+%In view to the adoption of new mathematical and statistical techniques, widely used industry for the benefit of tackling HEP challenges, as well as training newcomers to technique that can be re-used in future steps in their curriculum, a detailed teaching plan will have to be elaborated.

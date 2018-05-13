@@ -1,0 +1,135 @@
+% ---------------------------------------------------
+% CHAPTER SUMMARY MESSAGE: < WRITE THIS BEFORE ANY EDITING>
+% ---------------------------------------------------
+
+
+
+The incorporation of ML into particle physics experiments must respect two time lines: the schedule of HL-LHC and funding agencies, and the experiments' need for extensive validation
+of the algorithms. %necessary to process and interpret data into statements about nature.
+
+The current LHC schedule has Run 3 starting in 2021 and the HL-LHC, if approved, starting in 2026. As software processes and algorithms are re-imagined, their implementation must fit into these time frames if they are to maximize their benefit to the physics. To fit this schedule, a newly proposed implementation would need to show a demonstration in 2018 to prove viability. Two years later, in 2020, the idea needs to attain a level of maturity to be included in the HL-LHC Technical Design Report. The project should then be further refined towards a large scale test around the middle of Run 3, about 2022. Run 3 is scheduled to end in late 2023. The project must then be adapted to the HL-LHC software and physics analysis environment as it will be relied on by the experiment.
+
+%The steps necessary to incorporate new tools into existing analysis implementations are driven %primarily by the experimental validation process. as well as the two timescales mentioned above.
+
+% The point is this is research and development roadmap,
+%
+
+The path of taking a ML idea from conception to community-wide acceptance and deployment will entail several stages, as appropriate. There are ample opportunities to make the process more efficient. For example, in many steps having common data sets, as discussed in Section \ref{subsec:benchmark} will likely accelerate the progress.
+
+\begin{enumerate}
+ \item Problem formulation and data set preparation: Problem formulation is the first step in building an ML algorithm. The inputs and desired output need to be established. The training and validation data sets must be identified and simulated. In many cases, these data sets are large, and resources must be identified to possibly create and store the data. In most cases, the data needs to be processed into a form suitable for input into the algorithm. Since these steps are often lengthy, common data sets with well-defined problems will be very helpful
+ \item Feasibility/Demonstration: Given a dataset, appropriate ML algorithms need to be investigated and evaluated for ability to solve the problem. In some cases, such studies can be preformed on simplified data sets
+ \item First application: An application of the solution to one or few specific physics analysis where the ML technique significantly improves the physics result. Here the incorporation of the technique into the computing work-flow will likely be very specific to the application and require significant manual intervention
+ \item Scaling/Optimization: Evolving from a demonstration to a general solution requires use of realistic data sets with full detector simulation, noise, etc. Furthermore, the solution will also require optimization to achieve nominal physics and computing performance. A good practice would be to apply the solution to a specific physics analysis. This stage will likely require significant computing resources to scale solutions to the full detector and data sets
+ \item Integration/Validation: The solution needs to be incorporated into the experimental software and work-flow and validated.
+\end{enumerate}
+
+As an example, consider the simulation physics driver. An effort has recently started to build generative models that can significantly accelerate simulation of particle showers in calorimeters. These early efforts are based on simplified data sets specifically created for this problem, without the complications of realistic data and limited to a small section of calorimeters. The first papers\cite{Paganini:2017hrr} use GANs to generate calorimetric data which are reasonably faithful, but still require tuning. The next step involves exploration of DNN architecture and systematic hyper-parameter scans on HPCs to achieve the required performance. The technique can be applied to searches at LHC that involve boosted objects, where the required simulation samples require CPU intensive full GEANT-based simulation and are therefore limited in statistics due to resource limitations. The process of employing the new technique in a publication will elicit scrutiny by the full experiment, effectively validating the technique. Once the technique is accepted, it can be generalized beyond this first application and then incorporated into the experiment's software for use by others. Finally, as the technique is applied to an increasing number of physics analyses, the technique will be incorporated into the experiment's production work-flows.
+
+
+
+%( A Action Item, L Link to other WGs)
+%Designing a powerful and flexible model for machine-learning software in HEP
+%\begin{itemize}
+%    \item Flexibility to accommodate different architectures and data formats
+%    \begin{itemize}
+%        \item Import progress from the machine-learning community without investing a lot of time in development
+%        \item Remove barriers of interoperability, transferability of machine learning models
+%        \begin{itemize}
+%            \item A Build interfaces and flexible data formats
+%            \item L Link to Event Processing Frameworks WG?
+%        \end{itemize}
+%        \item Efficient programming model
+%        \begin{itemize}
+%            \item A Create more modular libraries
+%            \item A Move away from storing everything in RAM
+%        \end{itemize}
+%    \end{itemize}
+%    \item Efficient use of computing resources:
+%    \begin{itemize}
+%        \item Complex and data- and computationally-intensive algorithms, require optimal use of parallelized acceleration hardware, such as GPUs etc. (ML must be/stay fast enough for triggers)
+%        \begin{itemize}
+%            \item A Abstract high-level machine-learning models from low-level implementations
+%            \item A Reuse low-level interfaces and math libraries
+%            \begin{itemize}
+%                \item matrix and tensor computations
+%            \end{itemize}
+%            \item L Math WG
+%        \end{itemize}
+%        \item A Keep up and support up-to-date improvements in acceleration hardware and neuromorphic computing
+%        \item A Make powerful computing resources accessible for training and related software infrastructure (cloud et.c.)
+%        \item A More interactive capability of machine-learning software
+%        \begin{itemize}
+%            \item Jupyter, cloud-based?
+%        \end{itemize}
+%    \end{itemize}
+%    \item Long-term software maintenance and maintainability
+%    \begin{itemize}
+%        \item Reproducibility of Machine learning models
+%        \item L Preservation WG
+%    \end{itemize}
+%    \item Establishing generative models for efficient use of computing resources for simulation tasks.
+%    \begin{itemize}
+%        \item L Simulation WG
+%    \end{itemize}
+%    \item Identification of standard/safe algorithms: which techniques are safe against noise and can be deployed in triggers
+%\end{itemize}
+
+%Comments:
+%Sergei, Paul: added the first draft
+%Mario Lassnig: Machine learning approaches so far have been mostly in the domain of physics,
+%but there are many potential applications in computing as well. This should be extended, and
+%there are already some demonstrator/incubator projects for bootstrapping such activities.
+%Alessandra Forti: if it picks up for physics it may change also the storage architecture?
+%Valentin Kuznetsov: I’d like to see discussion about integration of non-HEP ML toolkits into HEP
+%workflows, e.g. from standard libraries in python (scikit-learn), R to DL frameworks as Theano,
+%TensorFlow, etc. Their impact on HEP can be significant and may provide many benefits for
+%community. We need tools to make a bridge from de-facto ROOT HEP data-format to more
+%simple CSV, NumPy, etc. flat based formats in different physics/computing workflows. Also, the
+%effort should be done in adaptation of distributed computing resources, such as
+%Hadoop/HDFS/Spark platform, to ML needs.
+
+%Adrian Bevan: Educating the people is an issue. Some strategy for enabling people to get
+%recognition for investing effort in algorithms is required if we want to address the imbalance
+%between state of the art and the algorithms in use in the field; and some strategy for educating
+%people in methods is required…
+%Adrian Bevan: Related to the discussion on ROOT re-engineering raised at CHEP ‘16 - how
+%dependent do we want new core tools on the current ROOT implementations? Do we need to
+%propose good practice design rules (enums not string comparisons etc, follow C++11 etc.,
+%interface guidlines) on tool developers to promote/reduce refactoring requirements down the
+%line?
+
+%Adrian Bevan: What lifetime do we need/expect for our tools for a given version; we need to
+%refactor on a regular basis to remain agile which is inconsistent with external forces on the
+%community that wants us to focus on physics output and some consensus (if possible) would
+%help discuss this issue with funding agencies.
+%Vava : Tools for machine learning which are safe for real-time applications (connects to trigger
+%WG). This is both in terms of physics performance (being relatively insensitive to changing
+%detector/accelerator conditions), implementation performance (training can be slow but
+%application has to be instantaneous and with a small memory footprint), and reproducibility on
+%different architectures (since the hardware used in the trigger may be quite specific for speed
+%reasons).
+
+%Adam Aurisano: What tools and techniques can we use to understand and evaluate our
+%methods? Can machine learning be used to improve reconstruction? How can we optimize
+%network architectures and hyperparameters? Modern deep networks are typically large and
+%relatively slow to evaluate on the grid. Can we use the features generated by one network as
+%the input for multiple specialized networks?
+
+%Vava : In the last years HEP has largely become accustomed to ML approaches, not least
+%because the gain from using e.g. a BDT instead of a cut-based analysis is huge in most cases.
+%At the level of selections, there is rarely more than a few \% difference between a well tuned
+%BDT, well tuned NN, etc., much of the work comes down to feature building, and the choice of
+%ML method comes down a lot to personal preference. In the future, however, we will have
+%smaller or at least harder to achieve marginal gains, and we may well be dealing with problems
+%where there is a much bigger difference between methods. Not only in terms of absolute
+%theoretical performance but even more in terms of performance which can be achieved in the
+%real world given e.g. the limited sizes of training samples, limited computing resources for
+%training/executing the classifier/regressor, and so on. So I think we need to work not only on
+%improving the availability of ML methods within our frameworks but also on getting a better
+%understanding of what classes of HEP problems are suited to what kinds of ML methods.
+
+%Paul Seyfert: thoughts on sorting. “Internal and external tools” and “bridges to other
+%communities” are somewhat closely related. They are both about the interaction with the
+%non-HEP ML world. One about software, the other about knowledge and work. I thus suggest
+%the sorting

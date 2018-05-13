@@ -1,0 +1,112 @@
+\begin{comment}
+\section{Machine Learning Workflows}
+
+The HEP computing model relies on high throughput computing (HTC). This means we operate on data under the assumption of independence between events, and divide our data across a very large number of homogeneous compute nodes that all operate in isolation. Results are drawn together as a sum in the end. This computing model is not natural for training machine learning algorithms where, in the simplest model, one training node must iterate over the entire dataset to fully leverage the statistical power it contains.
+
+The next sections outline several important workflows - how individuals and groups accomplish machine learning tasks today. The purpose is to list all the steps and discuss needs for each of them and their possible future evolution.
+
+\paragraph{Classical Training WorkFlow}
+\begin{enumerate}
+ \item Conversion/Extraction Tools
+       \begin{enumerate}
+        \item Conversion to ML format
+        \item Framework to ML format
+        \item Read Root to in memory ML format
+       \end{enumerate}
+ \item Pipelining Disk to Memory
+       \begin{enumerate}
+        \item Parallel io / processing in batches
+              \begin{enumerate}
+               \item Processing on device
+              \end{enumerate}
+       \end{enumerate}
+ \item Machine (Deep) Learning Framework
+       \begin{enumerate}
+        \item Use broader community and contribute back
+        \item Areas
+              \begin{enumerate}
+               \item Model definition
+               \item Training (e.g. parallel)
+               \item Model output format
+               \item Plotting tools
+               \item Analysis tools (e.g. ROC curves)
+               \item Notebooks
+              \end{enumerate}
+       \end{enumerate}
+ \item Hyperparameter scan/optimization “framework”
+       \begin{enumerate}
+        \item Workflow
+        \item Metadata
+       \end{enumerate}
+ \item Integration with experiment Workflow and Data Management System
+       \begin{enumerate}
+        \item Parallelization
+        \item HyperParameter
+        \item Model Parallel
+        \item Data Parallel
+       \end{enumerate}
+ \item Output to Experiment
+\end{enumerate}
+
+\paragraph{Production Training Workflow}
+\begin{enumerate}
+ \item Distributed within one site/HPC
+ \item Automation
+ \item Monitoring validation
+\end{enumerate}
+
+\paragraph{Production Usage of Training}
+\begin{enumerate}
+ \item Workflow like calibration-
+ \item Conditions Like Database for NN storage
+ \item Network Inference Service (potentially over network) (e.g. TensorFlow Server)
+       \begin{enumerate}
+        \item Memory management
+       \end{enumerate}
+\end{enumerate}
+
+\paragraph{User Analysis Workflow}
+\begin{enumerate}
+ \item Leveraging Production Tools?
+ \item Lightweight Tools
+ \item Exporting of Models/Weights from production
+ \item Model Sharing
+\end{enumerate}
+
+\paragraph{Software}
+\begin{enumerate}
+ \item Models Management
+       \begin{enumerate}
+        \item Providence  {\em PC Provenance?}
+        \item Common representation of architecture and weights
+       \end{enumerate}
+ \item Experiment SW Framework
+       \begin{enumerate}
+        \item Model inference
+        \item In framework training (e.g. for anomaly detection or rolling calibration)
+              \begin{enumerate}
+               \item Iteration (same events for each epoch)
+              \end{enumerate}
+        \item Condition like Model storage/booking service
+        \item Monitoring/validation tools
+        \item Better code framework automatic templating and/or FW autocompletion.
+        \item Better debugging tools: automatic parsing of logs, dynamic community driven FAQ (like StackExchange), etc.
+       \end{enumerate}
+ \item Requirements to Workflow Management system
+       \begin{enumerate}
+        \item Allocation of multi-node / hybrid resources
+       \end{enumerate}
+ \item Requirements to Facilities (link to Resources)
+       \begin{enumerate}
+        \item Specialized [mini]-HPC aimed at specified tasks (e.g. ML training)
+        \item High bandwidth between accelerators
+        \item High throughput IO
+        \item Support for different data access patterns
+              \begin{enumerate}
+               \item Hyperparameter scan / Model parallel- same data on lots of nodes
+               \item Data parallel- different data on all
+              \end{enumerate}
+       \end{enumerate}
+\end{enumerate}
+
+\end{comment}
