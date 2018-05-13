@@ -1,0 +1,331 @@
+% ---------------------------------------------------------
+% CHAPTER SUMMARY MESSAGE: < Explain using science drivers the R&D needed>
+% ---------------------------------------------------------
+
+% Contributor information SHOULD BE SAVED, but can be left as a comment for now
+%Contributors: Mark Neubauer, Matthew Feickert, Piero Altoe (NVIDIA), Kyle Cranmer, Maria Girone, Sofia Vallecorsa, Johannes Junggeburth, Nicolas Köhler, Jonas Graw, Michael Kagan, Mike Sokoloff, Daniele Bonacorsi, Gilles Louppe, Mario Campanelli, Michela Paganini, Paul Seyfert, Steven Schramm, Paolo Calafiura, Michele Floris, Jamal Rorie, Filip Siroky, Przemysław Karpiński, Alexander Radovic, Kim Albertsson, Jean-Roch Vlimant, Vladimir Vava Gligorov, Martin Erdmann, Stefano Carrazza, Zahari Kassabov
+
+%\subsection{Introduction}
+% Editors:
+This chapter describes the science drivers and high-energy physics challenges where machine learning can play a significant role in advancing the current state of the art.
+These challenges are selected because of their relevance and potential and also due to similarity with challenges faced outside the field.
+Despite such similarities, major R\&D work will go in adapting and evolving the methods to match the particular HEP requirements.
+
+
+\subsection{Detector Simulation}
+\label{sec:fast-simulation}
+% Editors: Michael Kagan, Matthew Feickert, Lukas Heinrich
+
+Particle discovery relies on the ability to accurately compare the observed detector response data with expectations based on the hypotheses of the Standard Model or models of new physics.
+While the processes of subatomic particle interactions with matter are known, it is intractable to compute the detector response analytically. As a result, Monte Carlo simulation tools, such as GEANT~\cite{GEANT4}, have been developed to simulate the propagation of particles in detectors to compare with the data.\medskip
+
+%Currently, the physics of proton-proton interactions are encoded in Monte Carlo generators, which produce a set particles that propagate through the detector material.
+%However, the interactions of particles with the detector material can not be encoded in a single simple parametric model, and instead individual subatomic interactions are simulated with Monte Carlo methods.
+
+
+For the HL-LHC, on the order of trillions of simulated collisions are needed in order to achieve the statistical accuracy of the simulations to perform precision hypothesis testing. However, such simulations are highly computationally expensive. For example, simulating the detector response of  a single LHC proton-proton collision event takes on the order of several minutes~\cite{Citation}. Particularly time consuming is the simulation of particles incident on the dense material of a calorimeter, the detector used to measure the energy deposited by the particles. Radiative and nuclear interactions result in the production of a multitude of secondary particles, collectively referred to as a shower.
+The high interaction probability and resulting high multiplicity of particles passing through the dense material make the simulation of such processes highly expensive. This problem is further compounded when particle showers overlap, as in the core of a jet of particles produced by high energy quarks and gluons.\medskip
+
+
+Fast simulation is the process of replacing the slowest components of the simulation chain with computationally efficient approximations. Often such approximations have been done by simplified parameterizations or particle shower look-up tables. These are computationally fast but often suffer from insufficient accuracy for high precision physics measurements and searches.\medskip
+
+Recent progress in high fidelity fast generative models, such as GANs and VAEs, which are able to sample high dimensional feature distributions by learning from existing data samples, offer a promising alternative for simulation.
+
+%The application of such techniques to simulation of LHC data may provide a computationally efficient approach, which, unlike the simplified models used previously, can capture subtle correlations in the feature space, providing a reasonably-high precision simulation.\medskip
+
+%The development of generative models for fast simulation may provide both a fast and high enough accuracy simulations for use at the HL-LHC.
+A simplified first attempt at using such techniques saw orders of magnitude increase in simulation speed over existing fast simulation techniques~\cite{Paganini:2017hrr}, but has not yet reached the required accuracy. Developing these techniques for realistic detector models and understanding how to reach the required accuracy is still needed. The fast advancement in the ML community of such techniques makes this a highly promising avenue to pursue.\medskip
+
+Although fast simulation is a necessity, some data analyses will require the highest fidelity simulations from GEANT. There is a large number of parameters that can be used to tune various aspects of the simulation properties. Performing such tuning over high dimensional parameter space is highly non-trivial.  Again, machine learning may offer a solution.  Modern optimization techniques, such as Bayesian Optimization, allow global optimization of the simulator without the detailed knowledge of its internal details~\cite{Ilten:2016csi}. Applying such techniques to simulation tuning may further improve the output of the simulations.
+
+%    \item Generative models (e.g. GANs), autoregressive models (Pixel RNN, etc)
+%    \item Could imagine some use of ML in helping estimate the uncertainty envelope of the
+%    simulations
+%    \item Bayesian optimization \& sequential design for dramatically more efficient generation of monte carlo. As opposed to generating MC a priori, we can sometimes be much more efficient if we generate MC on the fly in areas where we need it.
+%   Generative networks like CaloGAN, will help with that. Another promising avenue would be (as we think it is   written above) to replace I/O intensive pile-up to simulate the underlying event with “just-in-time” simulation of min bias background events (or the whole min-bias    background) using generative networks.
+%    \item Improvement of MC integration techniques to vastly increase accuracy and scalability of multi-leg or very high order QCD processes. The reduction of the number of calls to a matrix element during integration by learning the shape of the matrix element in a multidimensional phase space with various poles considerably improves the speed of MC integration and corresponding unweighting. This allows for the generation of vast and theoretically accurate data samples which will be needed for the HL-LHC.
+
+
+\subsection{Real Time Analysis and Triggering}
+\label{sec:real-time-analysis}
+% Editors: Vava + Conor
+
+The traditional approach to data analysis in particle physics assumes that the interesting events recorded by a detector can be selected in real-time (a process known as \emph{triggering}) with a reasonable efficiency, and that once selected, these events can be affordably stored and distributed for further selection and analysis later.
+However, the enormous production cross-section and luminosities of the LHC mean that these assumptions break down.\footnote{They may well also break down in other areas of high-energy physics in due course.}
+In particular there are whole classes of events, for example beauty and charm hadrons or low-mass dark matter signatures, which are so abundant that it is not affordable to store all the events for later analysis. In order to fully exploit the physics reach of the LHC, it will increasingly be necessary to perform more of the data analysis in real-time~\cite{1742-6596-664-8-082004}.
+\medskip
+
+This topic is discussed in some detail in the Reconstruction and Software Triggering chapter, but it is also an important driver of machine learning applications in HEP. Machine learning methods offer the possibility to offset some of the cost of applying reconstruction algorithms, and may be the only hope of performing the real-time reconstruction that enables real-time analysis in the first place. For example, the CMS experiment uses boosted decision trees in the Level 1 trigger to approximate muon momenta. One of the challenges is the trade-off in algorithm complexity and performance under strict inference time constraints. In another example, called the HEP.TrkX project, deep neural networks are trained on large resource platforms and subsequently perform fast inference in online systems.
+
+Real-time analysis poses specific challenges to machine learning algorithm design, in particular how to maintain insensitivity to detector performance which may vary over time. For example, the LHCb experiment uses neural networks for fast fake-track and clone rejection and already employs a fast boosted decision tree for a large part of the event selection in the trigger~\cite{Gligorov:2012qt}. It will be important that these approaches maintain performance for higher detector occupancy for the full range of tracks used in physics analyses. Another related application is speeding up the reconstruction of beauty, charm, and other lower mass hadrons, where traditional track combinatorics and vertexing techniques may become too computationally expensive.\medskip
+
+In addition, the increasing event complexity particularly in the HL-LHC era will mean that Machine Learning techniques may also become more important to maintaining or improving the efficiency of traditional triggers. Examples of where ML approaches can be useful are triggering of electroweak events with low-energetic objects; improving jet calibration at very early stage of reconstruction allowing jet triggers thresholds to be lowered; or supernovae and proton decay triggering at neutrino experiments.
+
+%Many of the overabundant signals which must be analyzed in real-time are also the most computationally expensive to reconstruct in the first place. %This also connects to the increasingly heterogeneous computer architectures, since the most cost-effective architecture may be different for each algorithm, and the real-time analysis has to fit within a fixed budget so that the data are not lost.
+
+%which requires rare quiet signals to of potentially noisy detectors.
+%    \item di-Higgs (e.g. hh $\rightarrow$ 4b), for measuring self-coupling, triggering is a major problem
+%    on low energy jets
+
+\subsection{Object Reconstruction, Identification, and Calibration}
+\label{sec:object-reco-id-calib}
+% Editors: Michael Kagan, Matthew Feickert, Lukas Heinrich, Amir Farbin
+
+
+The physical processes of interest in high energy physics experiments occur on time scales too short to be observed directly by particle detectors. For instance, a Higgs boson produced at the LHC will decay within approximately $10^{-22}$ seconds and thus decays essentially at the point of production. However, the decay products of the initial particle, which are observed in the detector, can be used to infer its properties. Better knowledge of the properties (e.g. type, energy, direction) of the decay products permits more accurate reconstruction of the initial physical process.\medskip
+
+Particles are observed in a detector through the energy they deposit when traversing material, which is subsequently digitized.
+Reconstruction is the process of converting the raw digital signals in the detector into the physical properties of particles.
+Particle Physics detectors are usually composed of several sub-detectors, each taking advantage of specific interaction mechanism to detect passage of a specific type of particle and measuring its properties. There is a variety of sub-detector technologies, but most belong to one of three categories:
+\begin{itemize}
+ \item Tracking Detectors: These detectors measure the trajectory of charge particles by spatially locating ionization. Usually trackers are placed in a magnetic field, so that the particle momentum can be inferred from the curvature of the trajectory. Very precise tracking detectors, such as those that employ silicon, provide  sufficient spatial resolution to enable locating the particle creation and/or decay point. The ionization also allows identifying the particle type.
+ \item Calorimeters: These detectors measure the particle energy by causing them to interact and lose the energy in material and counting secondary particles. Highly segmented calorimeters measure the profile of the energy deposition and identify the particle type.
+ \item Particle Identification: These detectors are aimed at determining a specific particle type using a variety of techniques.
+\end{itemize}
+
+Algorithmic reconstruction typically involves several steps that turn the data from the detector electronics (\emph{raw} measurements) into higher level data objects, corresponding to the physical particles that were detected (\emph{features}):
+\begin{itemize}
+ \item Feature Extraction: The signal from the passage of particles through a detector element, e.g. a calorimeter cell, is observed above noise in the raw electronic output associated with the element. This signal is then characterized.
+ \item Pattern Recognition: The pattern of signals in geometrically adjacent detector elements is associated with the passage of a signal or group of particles. In calorimeters, this step is commonly referred to as clustering.
+ \item Object Characterization: Properties of the objects are measured. In tracking detectors, this step means fitting a pattern of ``hits'' to a helix. In calorimeters, this step extracts the energy, location, and other properties of the cluster that for example characterize the shape of the cluster.
+ \item Combined reconstruction: Objects in different detectors are associated together to create a particle candidate.
+\end{itemize}
+
+%Often the passage of a particle is interpreted differently by different reconstruction algorithms. An early step of physics analysis usually involves selecting a single interpretation from the outputs of these algorithms. This step is usually referred to as particle identification.
+
+Machine learning can in principle be applied at any of these steps. For example, experiments have trained ML algorithms on the features from combined reconstruction algorithms to perform particle identification for decades. In the past decade BDTs have been one of the most popular techniques in this domain. More recently, experiments have been able to extract better performance with deep neural networks.
+
+
+An active area of research is performing particle identification and extracting particle properties on the output of feature extraction with DNNs, in particular for calorimeters or time projection chambers (TPCs), where the data can be represented as a 2D or 3D image and the problems can be cast as a computer vision tasks, in which neural networks are used to reconstruct images from pixel intensities. These neural networks are adapted for particle physics applications by optimizing network architectures for complex, 3-dimensional detector geometries and training them on suitable signal and background samples derived from data control regions. Applications include identification and measurements of electrons and photon from electromagnetic showers, jet properties including substructure and b-tagging, taus and missing energy. Promising deep learning architectures for these tasks include convolutional, recurrent and adversarial neural networks. A particularly important application is to Liquid Argon TPCs (LArTPCs), which is the chosen detection technology for the flagship neutrino program. %Algorithm reconstruction has proven to be difficult while early attempts at convolutional neural networks (CNNs) have shown better performance with little effort.
+
+For tracking detectors, pattern recognition is the most computationally challenging step. In particular, it becomes computationally intractable for the HL-LHC. The hope is that machine learning will provide a solution that scales linearly with LHC intensity. A current effort called HEP.TrkX investigates deep learning algorithms such as long-term short-term (LSTM) networks for track pattern recognition on many-core processors.
+
+
+\subsection{Sustainable Matrix Element Method}
+\label{sec:applications-MEM}
+%Editor: M. Neubauer
+
+% Need to add reference to the stand-alone whitepaper: HSF-CWP-018
+
+The Matrix Element (ME) Method~\cite{Kondo:1988yd,Fiedler:2010sg,2011arXiv1101.2259V,Elahi:2017ppe} is a powerful technique which can be utilized for measurements of physical model parameters and direct searches for new phenomena. It has been used extensively by collider experiments at the Tevatron for standard model (SM) measurements and Higgs boson searches~\cite{Abazov:2004cs,Abulencia:2006ry,Aaltonen:2008mv,Aaltonen:2010cm,Abazov:2009ii,Aaltonen:2009jj} and at the LHC for measurements in the Higgs and top quark sectors of the SM~\cite{Chatrchyan:2012xdj,Chatrchyan:2013mxa,Aad:2014eva,Khachatryan:2015tzo, Khachatryan:2015ila,Aad:2015gra,Aad:2015upn}. The ME method is based on \emph{ab initio} calculation of the probability density function $\mathcal{P}$ of an event with observed final-state particle momenta ${\bf x}$ to be due to a physics process $\xi$ with theory parameters $\boldsymbol\alpha$. One can compute $\mathcal{P}_{\xi}({\bf x}|{\boldsymbol\alpha})$ by means of the factorization theorem from the corresponding partonic cross-sections of the hard-scattering process involving parton momenta ${\bf y}$ and is given by
+\begin{equation}
+ \mathcal{P}_{\xi}({\bf x}|{\boldsymbol\alpha}) = \frac{1}{\sigma^{\rm fiducial}_{\xi}(\boldsymbol\alpha)} \int d\Phi ({\bf y}_{\rm final}) \; dx_1 \; dx_2~\frac{f(x_1)f(x_2)}{2s x_1 x_2} \; |\mathcal{M}_{\xi}({\bf y}|\boldsymbol\alpha)|^2 \; \delta^{4}({\bf y}_{\rm initial}-{\bf y}_{\rm final}) \; W({\bf x}, {\bf y})
+ \label{eqn:MEProb}
+\end{equation}
+where and $x_i$ and ${\bf y}_{{\rm initial}}$ are related by $y_{{\rm initial},i}\equiv \frac{\sqrt{s}}{2}(x_i,0,0,\pm x_i)$, $f(x_i)$ are the parton distribution functions, $\sqrt{s}$ is the collider center-of-mass energy, $\sigma^{\rm fiducial}_{\xi}(\boldsymbol\alpha)$ is the total cross section for the process $\xi$ (with $\boldsymbol\alpha$) times the detector acceptance, $d\Phi({\bf y})$ is the phase space density factor, $\mathcal{M}_{\xi}({\bf y}|\boldsymbol\alpha)$ is the matrix element (typically at leading-order (LO)), and $W({\bf x}, {\bf y})$ is the probability density (aka ``transfer function'') that a selected event ${\bf y}$ ends up as a measured event ${\bf x}$. One can use calculations of Eqn.~\ref{eqn:MEProb} in a number of ways (e.g. likelihood functions) to search for new phenomena at particle colliders.
+
+%One can use calculations of Eqn.~\ref{eqn:MEProb} in a number of ways to search for new phenomena at particle colliders. For measurement of model parameters $\boldsymbol\alpha$, one would maximize the likelihood function for observed events $\mathcal{L}(\boldsymbol\alpha)$ given by
+%\begin{equation}
+%\mathcal{L}(\boldsymbol\alpha) = \prod_{i} \sum_{k} f_k %\mathcal{P}_{\xi_k}({\bf x}_i|{\boldsymbol\alpha})
+%\label{eqn:LH}
+%\end{equation}
+%where $f_k$ are the fractions of (non-interfering) processes contributing to the data. For new particle searches, one can (using Bayes' Theorem~\cite{Bayes01011763}) compute for a hypothesized signal $S$ the probability $P(S|{\bf x})$ given by
+%\begin{equation}
+%P(S|{\bf x}) = \frac{\sum_{i} \beta_{S_i} \mathcal{P}_{S_i}({\bf x}|\boldsymbol\alpha_{S_i}) }{\sum_{i} \beta_{S_i} \mathcal{P}({\bf x}|\boldsymbol\alpha_{S_i}) + \sum_{j} \beta_{B_j} \mathcal{P}({\bf x}|\boldsymbol\alpha_{B_j})}
+%\label{eqn:LR}
+%\end{equation}
+%where, $S_i$ and $B_j$, denote all signal and background processes relevant to the considered phase space and $\beta$ are the \emph{a priori} expected process fractions. According to the Neyman-Pearson Lemma~\cite{Neyman289}, Eqn.~\ref{eqn:LR} is the optimal discriminant function for $S$ in the presence of $B$ and can be used to extract a signal fraction in the data.
+
+The ME method brings in several unique and desirable featudres, most notably it (1) does not require training data being an \emph{ab initio} calculation of event probabilities, (2) incorporates all available kinematic information of a hypothesized process, including all correlations, and (3) has a clear physical meaning in terms of the transition probabilities within the framework of quantum field theory.
+
+One drawback to the ME Method is that it has traditionally relied on LO matrix elements, although nothing limits the ME method to LO calculations. Techniques that accommodate initial-state QCD radiation within the LO ME framework using transverse boosting and dedicated transfer functions to integrate over the transverse momentum of initial-state partons have been developed~\cite{Alwall:2010cq}.
+Another challenge is development of the transfer functions which rely on tediously hand-crafted fits to full simulated Monte-Carlo events.
+
+The most serious difficulty in the ME method that has limited its applicability to searches for beyond-the-SM physics and precision measurements is that it is very \emph{computationally intensive}. If this limitation is overcome, it would enable more widespread use of ME methods for analysis of LHC data. This could be particularly important for extending the new physics reach of the HL-LHC which will be dominated by increases in integrated luminosity rather than center-of-mass collision energy.
+
+Accurate evaluation of Eqn.~\ref{eqn:MEProb} is computationally challenging for two reasons: (1) it involves high-dimensional integration over a large number of events, signal and background hypotheses, and systematic variations and (2) it involves sharply-peaked integrands\footnote{a consequence of imposing energy/momentum conservation in the processes} over a large domain in phase space. In reference to point (1), the matrix element $\mathcal{M}_{\xi}({\bf y}|\boldsymbol\alpha)$ in the method involves all partons in the $n\rightarrow m$ process, so when the 4-momentum of particles are not completely measured experimentally (e.g. neutrinos), one must integrate over the missing information which increases the dimensionality of the integration. In reference to point (2), a clever technique to re-map the phase space in order to reduce the sharpness of integrate in that space in an automated way ({\sf MADWEIGHT}~\cite{Artoisenet:2010cn}) is often used in conjunction with a matrix element calculation package ({\sf MADGRAPH\_aMC\@NLO}~\cite{Alwall:2014hca}). In practice, evaluation of definite integrals by the ME approach invokes techniques such as importance sampling (see {\sf VEGAS}~\cite{PETERLEPAGE1978192,Ohl:1998jn} and {\sf FOAM}~\cite{JADACH200355}) or recursive stratified sampling (see MISER~\cite{Press:1989vk}) Monte Carlo integration. Acceleration of some of these techniques on modern computing architectures has been achieved, for example concurrent phase space sampling in VEGAS on GPUs.
+
+Despite the attractive features of the ME method and promise of further optimization and parallelization of the evaluation of Eqn.~\ref{eqn:MEProb}, the computational burden of the ME technique will continue to limit is range of applicability for practical data analysis without new and innovative approaches. The primary idea put forward in this section is to utilize modern \emph{machine learning techniques to dramatically speed up the numerical evaluation of Eqn.~\ref{eqn:MEProb}} and therefore broaden the applicability of the ME method to the benefit of HL-LHC physics.
+
+Applying neural networks to numerical integration problems is plausible but not new (see~\cite{CSEarticle2006,TICNC4344207,IJMC2013}, for example). The technical challenge is to design a network which is sufficiently rich to encode the complexity of the ME calculation for a given process over the phase space relevant to the signal process. Deep Neural Networks (DNNs) are strong candidates for networks with sufficient complexity to achieve good approximation of Eqn.~\ref{eqn:MEProb}, possibly in conjunction with smart phase-space mapping such as described in~\cite{Artoisenet:2010cn}. Promising demonstration of the power of Boosted Decision Trees~\cite{friedman2000,friedman2001} and Generative Adversarial Networks~\cite{GAN2014arXiv1406.2661G} for improved Monte Carlo integration can be found in~\cite{Bendavid:2017zhk}. Once a set of DNNs representing definite integrals of the form of Eqn.~\ref{eqn:MEProb} is generated to good approximation, evaluation of the ME method calculations via the DNNs will be very fast. These DNNs can be thought of as preserving the essence of ME calculations in a way that allows for fast forward execution. They can enable the ME method to be both \emph{nimble} and \emph{sustainable}, neither of which is true today.
+
+The overall strategy is to do the expensive full ME calculations as infrequently as possible, ideally once for DNN training and once more for a final pass before publication, with the DNNs utilized as a good approximation in between. A future analysis flow using the ME method with DNNs might look something like the following: One performs a large number of ME calculations using a traditional numerical integration technique like {\sf VEGAS} or {\sf FOAM} on a large CPU resource, ideally exploiting acceleration on many-core devices. The DNN training data is generated from the phase space sampling in performing the full integration in this initial pass, and DNNs are trained either \emph{in situ} or \emph{a posteriori}. The accuracy of the DDN-based ME calculation can be assessed through this procedure. As the analysis develops and progresses through selection and/or sample changes, systematic treatment, etc., the DNN-based ME calculations are used in place of the time-consuming, full ME calculations to make the analysis nimble and to preserve the ME calculations. Before a result using the ME method is published, a final pass using full ME calculation would likely be performed both to maximize the numerical precision or sensitivity of the results and to validate the analysis evolution via the DNN-based approximations.
+
+There are several activities which are proposed to further develop the idea of a Sustainable Matrix Element Method. The first is to establish a cross-experiment group interested in developing the ideas presented in this section, along with a common software project for ME calculations in the spirit of~\cite{MoMEMta}. This area is very well-suited for impactful collaboration with computer scientists and those working in machine learning. Using a few test cases (e.g. $t\bar{t}$ or $t\bar{t}h$ production), evaluation of DDN choices and configurations, developing methods for DNN training from full ME calculations and direct comparisons of the integration accuracy between Monte Carlo and DNN-based calculations should be undertaken. More effort should also be placed in developing compelling applications of the ME method for HL-LHC physics. In the longer term, the possibility of Sustainable-Matrix-Element-Method-as-a-Service (SMEMaaS), where shared software and infrastructure could be used through a common API, is proposed.
+
+\subsection{Learning the Standard Model}
+
+New physics may manifest itself as unusual or rare events. One approach is to accurately identify the Standard Model processes and search for anomalies. Classifying the Standard Model events is a challenging task, as it consists of many complicated physics processes. Multi-class machine learning algorithms are well-suited for this classification problem. Once an event is classified as likely a known physics process it can be filtered out and remaining events can be further analyzed for hints of new physics. Additionally, unsupervised machine learning techniques can be applied to remaining events to cluster them together. This approach would also be useful in identifying detector problems.
+
+\subsection{Theory Applications}
+
+The theoretical physics community has a number of challenges where machine learning can make an impact. These include areas of theoretical model optimization with hundreds of parameters, searches for new models,  understanding and estimation of the parton distribution functions and possibly quantum machine learning. The following details one such application: learning of the parton distribution functions with machine learning.
+
+Making progress towards the objectives of the HL-LHC program (see section \ref{sec:introduction}) requires not only
+obtaining the experimental measurements of the physical processes but also reliable theory inputs to compare to. This becomes increasingly challenging as the experimental data gets more precise. There are numerous examples of phenomenologically relevant processes where the experimental uncertainty is comparable to the estimate of the theoretical uncertainty of the corresponding calculation.
+
+Furthermore, the theory does not predict the value of all the inputs required for the computations (for example the
+value of the strong coupling constant $\alpha_S$ at the $Z$ mass), and there are situations where the equations
+resulting from theory cannot be solved to describe the physics adequately, and the corresponding theory inputs must be obtained from data instead. A more complex example is the determination of Parton Distribution Functions (PDFs): Quantum Chromodynamics (QCD) describes the proton collisions at high energy in terms of \emph{partons} (e.g. quarks and gluons), but it is not possible to calculate directly from QCD the momentum carried by each quark or gluon within a proton since QCD is not solvable in its confined regime. Our lack of theoretical knowledge about the characterization of
+partons within a proton is embedded into a suitable definition of the Parton Distribution Functions (approximately the momentum densities of each of the partons) The PDFs then need to be determined from experimental data. The NNPDF collaboration uses Machine Learning techniques to obtain a PDF determination that is accurate enough to be suitable for high-precision collider data comparison. The NNPDF fitting procedure is described in full details in \cite{Ball:2014uwa}.
+
+The idea is to combine data from all relevant physical processes and fit a neural network representing each PDF. The difficulty of the procedure steams from the fact that multiple experimental inputs need to be combined to obtain
+a PDF fit. Each of these inputs adjoins only indirect constraints on the PDFs, leaving some regions of the PDF
+completely unconstrained by data. NNPDF fit includes around 50 datasets from different physical processes, and results that are not always consistent among themselves. Therefore it is crucial to propagate the uncertainty of the experimental inputs into uncertainty on the PDFs.
+
+While the data set is small, each experimental point has an indirect relation to the PDFs, as it is the result of the convolution of one or two PDFs with the corresponding partonic cross section. Code has been developed to compute these convolutions \texttt{APFELgrid}~\cite{Bertone:2016lga}. Future research directions include the possibility of using standard ML frameworks to express efficiently the PDF fitting problem.
+%The inclusion of high precision LHC data in the PDF fits presents new challenges in two different ways. First, the data
+%can be precise enough that experimental and theory uncertainties are comparable in size. Consequently,
+The uncertainties of the theory calculations need to be taken into account as well in the fits. A fully systematic treatment of theory errors in PDFs is a topic of research where Machine Learning could play an important role.  The dominant uncertainties in the data are no longer statistical and instead arise from correlated systematics. Determining those systematics accurately is non trivial on the side of the experimental analyses and can have a major impact on the
+resulting PDFs. The problem grows more complex when ML techniques for which there is no simple recipe to estimate the uncertainty are used extensively in the experimental analysis. Taking full advantage of these advanced methods requires interdisciplinary research and communication on topics such as developing regularization schemes for experimental covariance matrices.
+
+In conclusion, it is not only important to obtain the best fit PDF, but also a reliable estimation of the uncertainty, which in turn requires controlling the uncertainty of the experimental and theoretical inputs.
+
+
+% and can be summarized as follows:
+
+%\begin{itemize}
+%\item Monte Carlo generation of artificial data.\\ Experimental data,
+%  with central values, errors and their correlations are used to
+%  generate further artificial data, consistent with the covariance
+%  matrix provided by the experiment.
+%\item Neural network fit to artificial data.\\ A genetic algorithm is
+%  used to fit each artificial data set to a neural
+%  network representing the PDF.
+%\item Predictions are later obtained by computing statistical
+%  estimators (such as means, quantiles and standard deviations) over
+%  the ensemble of neural networks.
+%\end{itemize}
+
+%A different direction of research concerns minimizing the computational expense of the PDF convolutions required to  (i.e. the cost to use the PDF sets). Several tools have been developed to produce reduced but statistically equivalent PDF sets \cite{Carrazza:2016htc, Carrazza:2015aoa, Carrazza:2015hva}, and further steps are required to deliver the  PDFs efficiently encoded in binary form, instead of the text based LHAPDF format \cite{Buckley:2014ana} currently in use.
+
+
+
+\subsection{Monitoring Detectors, Hardware Anomalies and Preemptive Maintenance}
+\label{sec:applications-monitoring}
+Data-taking of current complex HEP detectors is continuously monitored by physicists taking shifts to monitor the quality of the incoming data. Typically, hundreds of histograms have been defined by experts and shifters are alerted when an unexpected deviation with respect to a reference occurs. It regularly happens that a new type of problem is unseen in a timely manner because it has not been foreseen by the expert.
+
+A whole class of ML algorithms called anomaly detection can be useful for such problems. They are able to learn from data and produce an alert when deviation is seen. By monitoring many variables at the same time such algorithms are sensitive to subtle signs forewarning of imminent failure, so that preemptive maintenance can be scheduled. Such techniques are already used in the industry.
+
+One challenge is that normal drifts in environmental conditions can induce drifts in the data. Beyond just reporting a problem, the natural next step is to connect anomaly detection algorithm to appropriate action: restart an online computer or contact an on-call expert. In the long term, the hardware and data structures of future detectors should be designed to facilitate the operation of anomaly detection algorithms.
+
+\subsection{Computing Resource Optimization and Control of Networks and Production Workflows}
+\label{sec:resource-optimization}
+
+% Editors: Daniele Bonacorsi, Valentin Kuznetsov
+%\subsubsection{Application of ML for computing infrastructure}
+%\label{sec:applications-infrastructure}
+Data operations is one of the significant challenges for the upcoming HL-LHC. In the current infrastructure, LHC experiments rely on in house solutions for managing the data. While these approaches work reasonably well today, machine learning can help automate and improve the overall system throughput and reduce operational costs.
+
+Machine Learning can be applied in many areas of computing infrastructure, workflow and data management. For example, dataset placement optimization and reduction of transfer latency can lead to a better usage of site resources and an increased throughput of analysis jobs. One of the current examples is predicting the ``popularity'' of a dataset from dataset usage, which helps reduce disk resource utilization and improve physics analysis time turn-over.
+
+Data volume in data transfers is one of the challenges facing the current computing systems as thousand of users need to access thousands of datasets across the Grid. There is an enormous amount of metadata collected by application components, such as information about failures, file accesses etc. Resource utilization optimization based on this data, including Grid components and software stack layers, can improve overall operations. Understanding the data transfer latencies and network congestion may improve operational costs of hardware resources.
+
+Networks are going to play a crucial role in data exchange and data delivery to scientific applications in HL-LHC era. The network-aware application layer and configurations may significantly affect experiment's daily operations. ML applications can be in network security in identifying anomalies in network traffic; predicting network congestion; bug detection via analysis of self-learning networks, and WAN path optimization based on user access patterns.
+
+%In the area of job brokering and workflow management, machine learning may help optimize the available resources and demand for those resources.
+%The usage of opportunistic resources provided by commercial cloud providers becoming a standard practice within HEP community. This brings new challenges in scheduling resources in the most cost-efficient way where ML can provide insight on best ways to fit the processing needs to the available resources within constrained budgets.
+
+% data that can be used to predict various quantities such as data on-site performance and failures, services behaviour, data transfers and access to datasets, what information is used within datasets.
+%are a gold mine to measure how we ran ops, how to improve, and what can and needs to be predicted at some level (e.g. data transfers logs, job submissions info, data on site performances/failures, data on infrastructure and services behaviour, data on most accessed datasets in analysis, ..)
+%\item Data analytics on dataset location, what information is used within datasets.
+%\item This is potentially a great application for tools like OpenAI that may react to changes monitoring data and learn from the effect of their reaction.
+
+\subsection{Collaborative Benchmark Datasets}
+\label{subsec:benchmark}
+There is a strong incentive for HEP to develop public benchmark datasets, beyond just challenges. Access to a dataset makes the discussion much more concrete and productive. Within the HEP community a common dataset allows to compare algorithms with a much better accuracy and will be very useful for research and development. The same benchmark datasets can also be used for teaching, tutorials and training.
+
+These benchmark datasets could be built based on public simulation engine, or released by experiments within the bounds of their data access policy. Even a small subset of an experiment simulated data can be the base of a very valuable benchmark dataset. For example, the CMS experiment has released a significant amount of its simulated and collected data via the CERN Open Data Portal \cite{opendata}.
+
+To be maximally useful, the subsequent guidelines should be followed when designing a dataset:
+\begin{itemize}
+ \item Simplify the dataset as much as possible
+ \item Document the dataset to make it understandable by a non-HEP expert
+ \item Create methodology and metrics for evaluation proposed solutions, and document them
+ \item Prepare an integration plan for incoming ideas and solutions
+ \item Feedback results of successful applications
+\end{itemize}
+
+
+%Additional items not yet included
+
+%\item Investigating and isolating the source of large gains from DL solutions to better inform future reconstruction/analysis efforts. Possible lines of investigation include auto-encoders and tSNE visualizations to find where any why we do better.
+
+%\subsubsection{Accelerator Physics Applications}
+%\label{sec:applications-accelerator}
+%Possible application of ML in monitoring of the LHC. Study general usefulness ML in accelerator
+%physics.
+
+%\subsection{Fast Pattern Recognition and Tracking}
+%\label{sec:applications-fast-track}
+%For use in triggering and offline.
+%\begin{itemize}
+%    \item Training of DNNs (e.g. CNNs) on large resource platforms (e.g. %HPCs) $\rightarrow$ Fast
+%    inference on FPGAs in online systems $\rightarrow$ HEP.TrkX
+%    \item Binarised neural networks promises to cut evaluation time using %integer arithmetic suitable of implementation in FPGA.
+%    \item Performant NN-based ghost track and clone track rejection (LHCb)
+%\end{itemize}
+
+%\subsection{Bayesian Optimization of Design}
+%\label{sec:applications-bayesian}
+%\begin{itemize}
+%   \item Ingredients:
+%      \begin{itemize}
+%         \item an objective function with a design - configuration of computing resources, trigger menu, analysis event selection...
+%         \item A practical means of evaluating that objective function for different parameters (reproducible workflow)
+%         \item One of many nice algorithms for efficient black-box optimization of expensive objective function. Eg. Bayesian optimization.
+%      \end{itemize}
+%   \item Applications:
+%      \begin{itemize}
+%         \item Optimization of Computing Resources and usage for the HL-LHC
+%         \item Trigger menus
+%         \item Event selection
+%         \item Cost analysis
+%         \item Detector design
+%      \end{itemize}
+%   \item Another, perhaps more speculative contribution would be along the lines of application of
+%   symmetries. Convolutional neural nets rely on translational symmetry, and one can
+%   imagine expressing various physical symmetries in the design of neural networks for
+%   analysis. Extensive use of this technique could improve many different algorithms.
+%   Connect with Reproducibility.
+%\end{itemize}
+
+
+%\begin{itemize}
+%    \item Automatization of the control shifters at HL-LHC?
+%    \item Contact directly on-call experts.
+%    \item Use of the full list of trigger primitives in NN training (this information gets lost for events
+%    that don’t pass the trigger).
+%    \item How can we influence hardware design and data structures so that raw data from
+%    hardware can be used for online anomaly detection?
+%    \item Fork data from main path to be read by ML anomaly detection algorithms?
+%    \item Industry already does that (eg. Siemens fault detection)
+%    \item Data structures that can look at raw primitives from multiple subsystems
+%\end{itemize}
+
+%\subsection{R\&D Challenges}
+%\label{sec:applications-rnd-challanges}
+%\begin{itemize}
+%\item Computing models : Challenge for computing platforms %and resources for DL -
+
+%   As we strive to use information that is rawer and further upstream in the event processing chain, we challenge our present computing models and computing platforms. The size of the data will present a significant challenge as well as the ability handle increasingly complex machine learning models required to achieve top performance. It is likely that combinations of CPUs and GPUs will allow us to survive in the next 5-10 years, but disk space is going to be a very hard barrier.
+
+
+
+%\subsection{Supporting Future R\&D}
+%\label{sec:applications-rnd-support}
+%\begin{itemize}
+%   \item Common libraries/code for people to use in order to start on new developments
+%   \item Centralized repository of data or generators to produce data, such that people who want to conduct future R\&D studies have somewhere to begin
+%   \begin{itemize}
+%      \item E.g. http://acts.web.cern.ch/ACTS/
+%   \end{itemize}
+%   \item Also a repository of challenges for people to play with new concepts, “showed the tracking challenge from connecting the dots to my student and after he said that now he understands what tracking is”
+%
+%      \item More “internal” challenges within physics to determine what can already be done by us
+
+%      \item Need to balance the amount of overhead in making a public challenge (~2 years to make, longer to process results) with the need to receive input from the ML experts
+%   \end{itemize}
+%   \item Can alternatively consider publishing benchmark data (or even code) associated with HEP ML publications so that others can play with it and learn the physics related to the paper
+%   \begin{itemize}
+%      \item Example, can get a DOI (citable) when uploading data to Mendeley Data or Zenodo
+%      \item Can’t do this for applications within a collaboration, but useful for collaboration-independent publications
+%   \end{itemize}
+%   \item There are current approaches which are very popular (such as deep learning), but there is no guarantee that this will remain the best approach in the future. How can we ensure that whatever software methodology is optimal, we can support it? (Note: explicitly ignoring the hardware side as that’s left to group 4)
+%   \begin{itemize}
+%     \item May be worth working toward having all usage of ML tools (TMVA, keras, or anything else) go through some well-defined common interface. The interface should be independent of any specific implementation or approach, and should define a generic means of defining how to “process” a given solution/classifier/algorithm/etc
+%    \item This is in a sense a definition of a “ML interface language”, which may take the form of config files, hooks in other languages, or similar
+%   \item It may be too early to define exactly what form this should take at the moment, but within the next ten years this may be feasible, and we should start to plan how to get there
+%  \item If we do this, we have to ensure that we are not imposing any “solution” on the community members. It should come from the bottom-up, or otherwise be constructed such that it is extensible in a way that does not exclude potential future developments.
+% \end{itemize}
+%\end{itemize}

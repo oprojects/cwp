@@ -1,0 +1,36 @@
+\usepackage[utf8]{inputenc}
+\usepackage[USenglish]{babel}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usepackage{verbatim}
+%\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;} % Removed by Matthew to use pifont's \checkmark instead
+
+%\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage[a4paper,margin=2cm]{geometry}% A4 for a US project?
+\usepackage{lineno}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{hyperref}
+\hypersetup{
+ colorlinks=true,       % false: boxed links; true: colored links
+ linkcolor=black,          % color of internal links
+ citecolor=green,        % color of links to bibliography
+ filecolor=magenta,      % color of file links
+ urlcolor=blue           % color of external links
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{amssymb}% http://ctan.org/pkg/amssymb
+\usepackage{amsmath}
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\providecommand{\xmark}{\ding{55}}% https://tex.stackexchange.com/questions/42619/x-mark-to-match-checkmark
+
+%N.B.: If you are going to be defining your own commands please use \providecommand instead of \newcommand. c.f.: https://tex.stackexchange.com/questions/36175/what-do-newcommand-renewcommand-and-providecommand-do-and-how-do-they-differ - Matthew
+
+% https://tex.stackexchange.com/questions/25701/bibtex-vs-biber-and-biblatex-vs-natbib
+\usepackage[backend=biber,defernumbers=true,sorting=none,giveninits=true,natbib=true,style=numeric-comp]{biblatex}
+
+% avoid printing "In: " with no journal to follow, for arxiv-only papers
+\renewbibmacro{in:}{}
+\addbibresource{bib/references.bib}
