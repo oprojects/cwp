@@ -1,4 +1,4 @@
-FILENAME = main
+FILENAME = HSF_ML_CWP
 
 date = $(shell date +%Y-%m-%d)
 output_file = draft_$(date).pdf
