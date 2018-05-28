@@ -17,13 +17,29 @@ jobs:
             make final
             echo ""
             ls -la
-      # - deploy:
-      #  # For Docker builds disable host key checking. Be aware that by adding
-      #  # that you are suspectible to man-in-the-middle attacks.
-      #  # Apply the ssh config to all host servers instead of applying to each
-      #  # host name. (example host names: lxplus.cern.ch)
-      #     name: Push draft to public web area
-      #     command: |
-      #         echo -e "Host *\n\tStrictHostKeyChecking no" >> ~/.ssh/config
-      #         SSHPASS=$PHYSSERVER_PASS sshpass -e scp HSF_ML_CWP.pdf USER@lxplus.cern.ch:/<PATH GOES HERE>/HSF_ML_CWP.pdf
-      #         echo "### File viewable at: https://www.cern.ch/<PATH GOES HERE>/HSF_ML_CWP.pdf"
+      - add_ssh_keys:
+          fingerprints:
+              - "3a:68:71:c4:62:59:cf:cd:75:ee:4c:b5:f5:63:d3:99"
+      - deploy:
+       # For Docker builds disable host key checking. Be aware that by adding
+       # that you are suspectible to man-in-the-middle attacks.
+       # Apply the ssh config to all host servers instead of applying to each
+       # host name. (example host names: lxplus.cern.ch)
+          name: Push draft to OProject Website
+          command: |
+              echo -e "Host *\n\tStrictHostKeyChecking no" >> ~/.ssh/config
+              cd ..
+              git clone git@github.com:oprojects/oprojects.github.io.git
+              cd oprojects.github.io/cwp
+              git config user.name "Matthew Feickert"
+              git config user.email "matthew.feickert@cern.ch"
+              cp ../../project/HSF_ML_CWP.pdf ml-cwp.pdf
+              git add ml-cwp.pdf
+              if [[ ! -z $CIRCLE_PULL_REQUEST ]]; then
+                git commit -m "[$(date -u '+%Y-%m-%d %H:%M')] Update CWP draft from iml-wg/cwp PR${CIRCLE_PULL_REQUEST##*/}"
+                git push origin master
+              else
+                git commit -m "[$(date -u '+%Y-%m-%d %H:%M')] Update CWP draft from iml-wg/cwp"
+                git push origin master
+                echo "### File viewable at: https://oproject.org/cwp/"
+              fi
