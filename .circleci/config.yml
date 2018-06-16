@@ -1,0 +1,37 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: matthewfeickert/latex-docker
+    branches:
+      ignore:
+        - /test-.*/
+    steps:
+      - checkout
+      - run:
+          name: Print current datetime
+          command: date -u '+%Y-%m-%d %H:%M:%S'
+      - run:
+          name: Compile HSF ML CWP
+          command: |
+            make final
+            echo ""
+            ls -la
+      - add_ssh_keys:
+          fingerprints:
+              - "3a:68:71:c4:62:59:cf:cd:75:ee:4c:b5:f5:63:d3:99"
+      - deploy:
+       # For Docker builds disable host key checking. Be aware that by adding
+       # that you are suspectible to man-in-the-middle attacks.
+       # Apply the ssh config to all host servers instead of applying to each
+       # host name. (example host names: lxplus.cern.ch)
+          name: Push draft to EOS
+          command: |
+              echo -e "Host *\n\tStrictHostKeyChecking no" >> ~/.ssh/config
+              if [[ ! -z $CIRCLE_PULL_REQUEST ]]; then
+                SSHPASS=$LXPLUS_PASS sshpass -e scp HSF_ML_CWP.pdf feickert@lxplus.cern.ch:/eos/user/f/feickert/www/IML-CWP/PRs/draft_ml-cwp_PR${CIRCLE_PULL_REQUEST##*/}.pdf
+                echo "### File viewable at: https://cern.ch/feickert/IML-CWP/PRs/draft_ml-cwp_PR${CIRCLE_PULL_REQUEST##*/}.pdf"
+              else
+                SSHPASS=$LXPLUS_PASS sshpass -e scp HSF_ML_CWP.pdf feickert@lxplus.cern.ch:/eos/user/f/feickert/www/IML-CWP/draft_ml-cwp.pdf
+                echo "### File viewable at: https://cern.ch/feickert/IML-CWP/draft_ml-cwp.pdf"
+              fi
