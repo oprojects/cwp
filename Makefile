@@ -17,6 +17,10 @@ default: document copy_draft
 
 all: default
 
+authors:
+	# python3 generate_author_list.py
+	python generate_author_list.py
+
 figures: $(figure_list)
 
 # Target assumes figure source is in same directory as expected figure path
@@ -28,7 +32,7 @@ images/%.pdf: images/%.tex
 text:
 	latexmk -$(LATEX) -logfilewarnings -halt-on-error $(FILENAME)
 
-document: clear_screen figures text
+document: authors clear_screen figures text
 
 copy_draft:
 	rsync $(FILENAME).pdf $(output_file)
@@ -51,6 +55,7 @@ final:
 	if [ -f *.aux ]; \
 		then make clean; \
 	fi
+	make authors
 	make figures
 	make text
 	make clean
