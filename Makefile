@@ -41,7 +41,7 @@ clear_screen:
 	clear
 
 clean:
-	rm -f *.aux *.bbl *.blg *.dvi *.idx *.lof *.log *.lot *.toc \
+	rm -f *.aux *.bak *.bbl *.blg *.dvi *.idx *.lof *.log *.lot *.toc \
 		*.glg *.gls *.glo *.xdy *.nav *.out *.snm *.vrb *.mp \
 		*.synctex.gz *.run.xml *.bcf *.brf *.fls *.fdb_latexmk
 

@@ -2,26 +2,14 @@
 
 \input{preamble}
 
-\title{Machine Learning Community White Paper}
-
-% \author{See page~\pageref{sec:author-list} for the full author list}
-\date{\today}
-
 \begin{document}
-\normalsize
-
-
-
-% \vskip 0.2cm
-% \hangindent=1cm
-\clearpage
-
-% \linenumbers
+\title{Machine Learning in High Energy Physics Community White Paper}
 
 \maketitle
 
 \setlength\parindent{0pt}
-\textbf{Abstract:} TODO
+\textbf{Abstract:}
+\input{src/abstract}
 \vskip 1cm
 \textbf{Editors}: Sergei Gleyzer$^{26}$, Paul Seyfert$^{11}$, Steven Schramm$^{28}$\\
 \newline
@@ -39,13 +27,13 @@
 \label{sec:applications}
 \input{src/applications}
 
+\section{Collaborating with other communities}
+\label{sec:collaboration}
+\input{src/collaboration}
+
 \section{Machine Learning Software and Tools}
 \label{sec:software}
 \input{src/software}
-
-%\section{Internal and External Machine Learning Tools}
-%\label{sec:intext}
-%\input{src/int_ext}
 
 \section{Computing and Hardware Resources}
 \label{sec:resources}
@@ -55,42 +43,18 @@
 \label{sec:training}
 \input{src/training}
 
-\section{Collaborating with other communities}
-\label{sec:collaboration}
-\input{src/collaboration}
-
 \section{Roadmap}
 \label{sec:roadmap}
 \input{src/roadmap}
 
+\section{Conclusions}
+\label{sec:conclusions}
+\input{src/conclusions}
+
 \appendix
-\clearpage
-% \section{Author list}
-% \label{sec:author-list}
-% \vskip 0.2cm
-% \hangindent=1cm
 \input{src/appendix}
+\clearpage
 
 \printbibliography[title={References}]
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% References
-%%%%%%%%%%es}
-
-%\section*{Questions/Challenges}
-%\begin{itemize}
-%\item How to use machine learning to do more physics within the existing computing and
-%software budget and reduce the processing %power, data transfer and storage space and
-%human effort per unit physics?
-%\item How to keep up with external software and %hardware evolution in machine learning?
-%\item How to best engage the machine learning %community, develop interfaces to external
-%machine learning capabilities and represent %data in formats useful to the machine
-%learning community
-%\item How do we train our community in machine %learning?
-%\item Roadmap questions
-%\item How do we best learn from and interact %with a rapidly changing ML community?
-%\item How can we best use domain knowledge?
-%\item How do we best contribute to the ML %community?
-%\end{itemize}
 
 \end{document}

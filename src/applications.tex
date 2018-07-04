@@ -23,7 +23,7 @@ While the processes of subatomic particle interactions with matter are known, it
 %However, the interactions of particles with the detector material can not be encoded in a single simple parametric model, and instead individual subatomic interactions are simulated with Monte Carlo methods.
 
 
-For the HL-LHC, on the order of trillions of simulated collisions are needed in order to achieve the statistical accuracy of the simulations to perform precision hypothesis testing. However, such simulations are highly computationally expensive. For example, simulating the detector response of  a single LHC proton-proton collision event takes on the order of several minutes~\cite{Citation}. Particularly time consuming is the simulation of particles incident on the dense material of a calorimeter, the detector used to measure the energy deposited by the particles. Radiative and nuclear interactions result in the production of a multitude of secondary particles, collectively referred to as a shower.
+For the HL-LHC, on the order of trillions of simulated collisions are needed in order to achieve the statistical accuracy of the simulations to perform precision hypothesis testing. However, such simulations are highly computationally expensive. For example, simulating the detector response of  a single LHC proton-proton collision event takes on the order of several minutes. Particularly time consuming is the simulation of particles incident on the dense material of a calorimeter, the detector used to measure the energy deposited by the particles. Radiative and nuclear interactions result in the production of a multitude of secondary particles, collectively referred to as a shower.
 The high interaction probability and resulting high multiplicity of particles passing through the dense material make the simulation of such processes highly expensive. This problem is further compounded when particle showers overlap, as in the core of a jet of particles produced by high energy quarks and gluons.\medskip
 
 
@@ -100,6 +100,12 @@ An active area of research is performing particle identification and extracting 
 
 For tracking detectors, pattern recognition is the most computationally challenging step. In particular, it becomes computationally intractable for the HL-LHC. The hope is that machine learning will provide a solution that scales linearly with LHC intensity. A current effort called HEP.TrkX investigates deep learning algorithms such as long-term short-term (LSTM) networks for track pattern recognition on many-core processors.
 
+\subsection{End-To-End Deep Learning}\label{subsec:endtoend}
+\label{sec:applications-e2e}
+The vast majority of analyses at the LHC use high-level features constructed from particle four-momenta, even when the analyses make use of machine learning. A high-profile example of such variables are the seven, so-called MELA variables, used in the analysis of the final states $\textrm{H} \rightarrow ZZ \rightarrow 4\ell$. While a few analyses, first at the Tevatron, and later at the LHC, have used the four-momenta directly, the latter are still high-level relative to the raw data. Approaches based on the four-momenta are closely related to the Matrix Element Method, which is described in the next section.
+
+Given recent spectacular advances in image recognition based on the use of raw information, we are led to consider whether there is something to be gained by moving closer to using raw data in LHC analyses. The so-called \emph{end-to-end deep learning} uses low level data from a detector together with deep learning algorithms. One obvious challenge is that low level data, for example, detector hits, tend to be both high-dimensional and sparse. Therefore, there is interest in also exploring automatic ways to compress raw data in a controled way that does not necessarily rely on domain knowledge.
+
 
 \subsection{Sustainable Matrix Element Method}
 \label{sec:applications-MEM}
@@ -143,9 +149,39 @@ The overall strategy is to do the expensive full ME calculations as infrequently
 
 There are several activities which are proposed to further develop the idea of a Sustainable Matrix Element Method. The first is to establish a cross-experiment group interested in developing the ideas presented in this section, along with a common software project for ME calculations in the spirit of~\cite{MoMEMta}. This area is very well-suited for impactful collaboration with computer scientists and those working in machine learning. Using a few test cases (e.g. $t\bar{t}$ or $t\bar{t}h$ production), evaluation of DDN choices and configurations, developing methods for DNN training from full ME calculations and direct comparisons of the integration accuracy between Monte Carlo and DNN-based calculations should be undertaken. More effort should also be placed in developing compelling applications of the ME method for HL-LHC physics. In the longer term, the possibility of Sustainable-Matrix-Element-Method-as-a-Service (SMEMaaS), where shared software and infrastructure could be used through a common API, is proposed.
 
+\subsection{Matrix Element Machine Learning Method}
+The matrix element method is based in the fact that the physics of particle collisions is encoded in the distribution of the particles' four-momenta and with their flavors. As noted in the previous section, the fundamental task is to approximate the left-hand side of Eq.~(\ref{eqn:MEProb}) for all (exclusive) final states of interest. In the matrix element method, one proceeds by approximating the right-hand side of Eq.~(\ref{eqn:MEProb}). But, since the goal is to compute $\mathcal{P}_{\xi}({\bf x}|{\boldsymbol\alpha})$, and given that billions of fully simulated events will be available, and that the simulations use exactly the same inputs as in the matrix element method, namely, the matrix elements, parton distribution functions, and transfer (or response) functions, one can ask whether a more direct machine learning approach can be developed to approximate  $\mathcal{P}_{\xi}({\bf x}|{\boldsymbol\alpha})$ without the need to execute the calculation of the right-hand side of Eq.~(\ref{eqn:MEProb}) explicitly. We believe the answer is yes, provided that a key advantage of the matrix element method can be replicated, namely, the fact that the method provides a function that depends explicitly on the model parameters ${\boldsymbol\alpha}$. Simulated events are typically simulated at fixed values of the model parameters. In order to replicate the advantage of the matrix element method, it would seem necessary to simulate events over an ensemble of model parameter points. But, that is a huge computational burden. The question is: is there a way to sidestep? Perhaps.
+
+The matrix element method is technically feasible because there are now many codes that provide access to the square of the matrix elements as a function of ${\boldsymbol\alpha}$. Consequently, it would be possible to build a parameterized set of simulated events by reweighting each simulated event using the weighting function
+\begin{align}
+ w(\boldsymbol{\alpha}, \boldsymbol{\alpha}_0) & = \frac{|\mathcal{M}_{\xi}({\bf y}|\boldsymbol\alpha)|^2}{|\mathcal{M}_{\xi}({\bf y}|\boldsymbol\alpha_0)|^2},
+\end{align}
+where $\boldsymbol{\alpha}_0$ denotes the values of parameters at which the events were simulated. In practice, in order to keep the dynamic range of the weights within reasonable bounds, one presumably would simulate sets of events at a few reasonable choices of the parameters and use the weights to interpolate between these fixed parameter points.
+
+What could one do with these parameterized simulated events? One could take advantage of the mathematical fact (shown more than quarter century ago) that, given a sufficiently expressive parameterized function $f(x, \omega)$, with parameters $\omega$, fitted by minimizing either the quadratic loss or cross entropy using data comprising two classes of objects of equal size, for example, signals with density $s(x)$ assigned a target of unity and backgrounds with density $b(x)$ assigned a target of zero, then asymptotically --- that is, for arbitrarily large training samples,
+\begin{align}
+ f(x, \omega) & = \frac{s(x)}{s(x) + b(x)}.
+ \label{eqn:discriminant}
+\end{align}
+This result was derived in the context of neural networks. However, it is in fact entirely independent of the nature of the function
+$f(x, \omega)$.
+
+We can exploit this result to approximate $\mathcal{P}_{\xi}({\bf x}|{\boldsymbol\alpha})$ directly using, for example, DNNs. For each simulated event, in the training set, one could sample $\boldsymbol{\alpha}$ from a known distribution $q(\boldsymbol{\alpha})$, thereby yielding an ensemble of triplets $\{ ({\bf x}, \boldsymbol{\alpha}, w(\boldsymbol{\alpha}, \boldsymbol{\alpha}_0)) \}$. Call this ensemble the ``signal". Sample ${\bf x}$ from another known distribution $p({\bf x})$ and for each ${\bf x}$ sample $\boldsymbol{\alpha}$ from $q(\boldsymbol{\alpha})$. Call the ensemble of pairs $\{({\bf x}, \boldsymbol{\alpha})\}$ the ``background". From Eq.~(\ref{eqn:discriminant}), we have
+\begin{align}
+ f(x, \omega) & = \frac{s({\bf x}, \boldsymbol{\alpha})}{s({\bf x}, \boldsymbol{\alpha}) + p({\bf x}) q(\boldsymbol{\alpha})},
+\end{align}
+from which we find
+\begin{align}
+ \mathcal{P}_{\xi}({\bf x}|{\boldsymbol\alpha}) & = \frac{s({\bf x}, {\boldsymbol\alpha})}{q(\boldsymbol{\alpha})} = p({\bf x}) \left( \frac{f}{1 - f} \right).
+\end{align}
+If this could be made to work, it would be a direct machine learning alternative to the matrix element method, which incorporates the advantages of the former with the added advantage that the transfer function is automatically incorporated without the need to model it explicitly and the calculation of $\mathcal{P}_{\xi}({\bf x}|{\boldsymbol\alpha})$ would be fast because it would be given directly in terms of the DNN, $f(x, \omega)$.
+
 \subsection{Learning the Standard Model}
 
 New physics may manifest itself as unusual or rare events. One approach is to accurately identify the Standard Model processes and search for anomalies. Classifying the Standard Model events is a challenging task, as it consists of many complicated physics processes. Multi-class machine learning algorithms are well-suited for this classification problem. Once an event is classified as likely a known physics process it can be filtered out and remaining events can be further analyzed for hints of new physics. Additionally, unsupervised machine learning techniques can be applied to remaining events to cluster them together. This approach would also be useful in identifying detector problems.
+
+
+
 
 \subsection{Theory Applications}
 
@@ -171,6 +207,14 @@ resulting PDFs. The problem grows more complex when ML techniques for which ther
 
 In conclusion, it is not only important to obtain the best fit PDF, but also a reliable estimation of the uncertainty, which in turn requires controlling the uncertainty of the experimental and theoretical inputs.
 
+
+
+\subsection{Uncertainty Assignment}
+\label{sec:uncertainty}
+Until fairly recently, little attention has been paid to the problem of assigning a measure of uncertainty to the output of machine learning algorithms. However, there is a growing recognition that the lack of such measures is a serious deficiency that needs to be addressed. This is particularly problematic in particle physics where accurate uncertainty assignments are crucial for assessing the quality of quantitative results. Uncertainty assignment is especially  urgent if machine learning methods are to be used for regression.
+
+Standard methods exist in the statistics literature to quantify uncertainty when an explicit likelihood function is available. Unfortunately, however, the overlap between the machine learning and statistics communities has been minimal at best. But, the problem of uncertainty offers many opportunities for fruitful collaborations between physicists, statisticians, computer scientists, and machine learning practioners, and is something that ought to be vigorously encouraged.
+One area ripe for collaboration is in the use of Bayesian methods to quantify uncertainty using, for example, Hamiltonian Monte Carlo (HMC) sampling of posterior densities. One serious issue is that HMC is computationally prohibitive for DNNs. Therefore, new, more effective, ways to do large scale Bayesian calculations that go beyond HMC need to be developed, in particular, it would be useful to develop methods that can be take advantage of multicore machines as discussed in section \ref{sec:resources}.
 
 % and can be summarized as follows:
 
@@ -220,21 +264,6 @@ Networks are going to play a crucial role in data exchange and data delivery to 
 %are a gold mine to measure how we ran ops, how to improve, and what can and needs to be predicted at some level (e.g. data transfers logs, job submissions info, data on site performances/failures, data on infrastructure and services behaviour, data on most accessed datasets in analysis, ..)
 %\item Data analytics on dataset location, what information is used within datasets.
 %\item This is potentially a great application for tools like OpenAI that may react to changes monitoring data and learn from the effect of their reaction.
-
-\subsection{Collaborative Benchmark Datasets}
-\label{subsec:benchmark}
-There is a strong incentive for HEP to develop public benchmark datasets, beyond just challenges. Access to a dataset makes the discussion much more concrete and productive. Within the HEP community a common dataset allows to compare algorithms with a much better accuracy and will be very useful for research and development. The same benchmark datasets can also be used for teaching, tutorials and training.
-
-These benchmark datasets could be built based on public simulation engine, or released by experiments within the bounds of their data access policy. Even a small subset of an experiment simulated data can be the base of a very valuable benchmark dataset. For example, the CMS experiment has released a significant amount of its simulated and collected data via the CERN Open Data Portal \cite{opendata}.
-
-To be maximally useful, the subsequent guidelines should be followed when designing a dataset:
-\begin{itemize}
- \item Simplify the dataset as much as possible
- \item Document the dataset to make it understandable by a non-HEP expert
- \item Create methodology and metrics for evaluation proposed solutions, and document them
- \item Prepare an integration plan for incoming ideas and solutions
- \item Feedback results of successful applications
-\end{itemize}
 
 
 %Additional items not yet included

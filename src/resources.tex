@@ -4,7 +4,7 @@
 
 A typical high-energy physics data model consists of a hierarchy of increasingly refined data stores. Each store provides a refined view of a list of "events", the self contained records that capture the state of the detector at the time when a particle interaction occurs. At the bottom of the hierarchy is the raw data, a byte-stream of the readout from detector electronics. At the top of the hierarchy are the ``high- level" physics objects, such as electrons or jets, providing descriptive information about the quality and topology of physics events. The data stores are typically processed by independent copies of identical code processed in batch computing queues. The result of this processing is filtered data and extracted physics parameters. % like production cross sections, coupling constants, and background rates.
 
-At present, training of machine learning algorithms is done using dedicated or private resources. These vary in configuration and processing power, depending on the size of the data and complexity of the algorithm. For a given event, the evaluation of algorithms is performed on a single core producing a single discriminator or regressor output. In order to progress to evaluation of complex machine learning, more computing power is needed in both the training and evaluation stages, as larger amounts of data are needed to feed models with tens or hundreds of thousands of parameters. This implies the expansion of the current computing model to include architectures that are well suited to machine learning tasks, such as many integrated core (MIC), graphical processing units (GPUs) and tensor processing units (TPUs). This is a fundamental departure from the single-core or few-core jobs. These architectures provide a significant computational speed improvement for both training and evaluation of ML algorithms, but require dedicated hardware, drivers, and software configuration. 
+At present, training of machine learning algorithms is done using dedicated or private resources. These vary in configuration and processing power, depending on the size of the data and complexity of the algorithm. For a given event, the evaluation of algorithms is performed on a single core producing a single discriminator or regressor output. In order to progress to evaluation of complex machine learning, more computing power is needed in both the training and evaluation stages, as larger amounts of data are needed to feed models with tens or hundreds of thousands of parameters. This implies the expansion of the current computing model to include architectures that are well suited to machine learning tasks, such as many integrated core (MIC), graphical processing units (GPUs) and tensor processing units (TPUs). This is a fundamental departure from the single-core or few-core jobs. These architectures provide a significant computational speed improvement for both training and evaluation of ML algorithms, but require dedicated hardware, drivers, and software configuration.
 
 Similarly, the locality and bandwidth of large data stores will need to be optimized in order to avoid bottlenecks in training and evaluation for analysis. Data placement and the need to use dedicated hardware indicate that a transition to HPC, or HPC-like, architectures may be needed to achieve the desired performance. Due to significant synergy with the direction of industry in this respect, use of commercially available resources should be considered for future high-energy physics computing models.
 
@@ -14,14 +14,11 @@ In the following subsections we will discuss the resource needs for the physics 
 
 
 \subsection{Resource Requirements}
-%\subsubsection{Resource requirements for training and inference}
 
 The popularity of deep learning methods is to large extent due to the possibility of training these models in a reasonable amount of time with large scale parallelism. In particular, the training stage requires repeated simultaneous access to many data elements and specialized hardware has been developed for training deep learning models. %Moreover, in future experiments, the datasets used to train ML algorithms will be of order petabytes or larger, requiring optimized access to those data to feed the algorithms.
 
 In contrast, inference can be an operation applied to a single data element at a time and needs to be performed only once. Inference has less demands on I/O and is limited only by the computing power and model complexity. Because inference has real-time applications in high-energy physics, latency and throughput constraints are the main challenges.
 
-
-\subsection{Resource Evaluation}
 
 A typical HEP application can require up to 1 GPU-week to train a single model.
 To obtain the best results and understand the performance of the model, an average of 100 hyper-parameter points optimization is typically performed. A single project could therefore easily require up to a full GPU-year for training.
@@ -30,22 +27,27 @@ The speed up of the training process can be obtained by means of faster and more
 
 %In particular, the processing speed of ML techniques for inference is the major determining factor for  applications like real time processing.
 
-If different ML techniques can achieve equivalent physics performance but require different processing power, it is important to quantify what is bringing the performance gains and what level of performance-processing power trade-off is is maintainable to achieve the required physics goals.
+If different ML techniques can achieve equivalent physics performance but require different processing power, it is important to quantify what is driving the performance gains and what level of performance-processing power trade-off is maintainable to achieve the required physics goals.
 
-\subsubsection{High Performance Computing}
+\subsection{Graphical Processing Units}
+\label{subsec:GPU}
+
+GPUs have been extremely useful in speeding up the training complex deep learning models. Many researchers in HEP are currently relying on private or university GPU clusters to perform machine learning training. Unfortunately, there is no centralized GPU resource available for HEP. Availability of greater and more modern GPU resources would significantly reduce the training time and assist many on-going $R\&D$ efforts in the community.
+
+\subsection{High Performance Computing}
 
 Resource-rich many-core processors such as MIC, GPUs, and TPUs are vital to the optimization of the training time of most modern machine learning algorithms, including deep learning neural networks, generative adversarial networks, autoencoders, etc. Availability of High Performance Computing (HPC) resources equipped with many-core processors and high-performance network storage are essential to distributed running of large-scale machine learning algorithms. Current efforts to bring and expand the availability of HPC resources in high-energy physics computing will be vital to the successful progress of application of machine learning techniques for current and future experiments.
 
 %and help address the following physics needs: object and event reconstruction, real-time analysis, fast simulation and event analysis. %Initial exploratory studies[\textbf{reference?}] have been conducted on running ML applications for HEP and are promising.
 
 
-\subsubsection{Field Programmable Gate Arrays}
+\subsection{Field Programmable Gate Arrays}
 Field Programmable Gate Arrays (FPGAs) allow an efficient and low-latent  application of machine learning algorithms directly at the level of hardware, as desirable for the high-energy physics trigger systems The following ML algorithms are more suitable for FPGAs due to their simpler parallelization: boosted decision trees, random forests and decision rule ensembles. For example the CMS experiment currently uses boosted decision trees in FPGAs in the trigger system to estimate muon momenta. Further research and development is needed in this area to apply more advanced machine learning techniques like deep learning directly in the hardware. One of the challenges is the limited availability of floating point operations gates and the precision needed to maintain the best performance. The possibility of coupling the FPGAs with a CPU with significant random-access memory (RAM) allows the shift of some of these operations to RAM.
 
 %In particular, it is foreseen that the advent of more libraries implementing an abstraction layer to neural nets inference on such hardware will greatly help the adoption and development of deep lerning technology.
 %The use of such hardware is likely more taylored for inference than for training.
 
-\subsubsection{Opportunistic Resources}
+\subsection{Opportunistic Resources}
 The current HEP computing model is based on tiered structure where computing resources are mostly large data centers providing CPU resources for collaboration. Although existing resources are gradually moving towards supporting GPUs, it is unlikely to reach all HEP computing centers in the near future. Therefore opportunistic resources are a possible option for training machine learning applications.
 
 %Below is a list of available resources for
@@ -61,20 +63,20 @@ Currently, cloud solutions provided by the industry run ML workflows on dedicate
 
 In order to make the best use of resources available to the community, all resources should ideally be made available through a unique work queue. That implies some uniformization of the software stack, and several specific requirements in the resource management system, especially in terms of data movement.
 
-\subsubsection{Data Storage and Availability}
+\subsection{Data Storage and Availability}
 Data storage limitations will have a major impact on machine learning applications. Presently, to train machine learning algorithms, it has been possible to take advantage of increases in statistics of Monte-Carlo simulated events needed for other use cases. Further machine learning progress may require more simulated data than what is available today. How to produce and store these additional large amounts of data is a challenge that needs to be overcome.
 
 Availability of data at PByte/EByte scale represents another challenge for ML community. A good solution must provide access to a large data volume for hundred or thousand of users simultaneously. As discussed in the Data Storage chapter [reference], data movement might need to be automatized to make the training data available transparently at high speed local storage with use of automatic caching mechanism. The success of Apache Spark and Google BigQuery platforms may serve as a model. Data streaming, transformation and readout in mini-batches may be required to train models over large data sets. This is in addition to the regular HEP workflows described in the Data Storage and Networking chapter [reference]
 
 
-\subsubsection{Software Distribution and Deployment}
+\subsection{Software Distribution and Deployment}
 To efficiently use the resources described in previous subsections, machine learning software needs to be available on the computing resources. Platforms, such as CERNVM File System (cvmfs), are very useful for software distribution that does not require local installation. Additional tools like docker containers for application shipping can be useful in providing homogeneous software environments across the different systems. Another challenge is that the software layer needs to be agnostic to the hardware back-end.
 
 % %Issues are sometimes with the needs for synchronization of various versions of software, point at which the use of self-consistent container is indeed more practical.
 
 %At the same time we need tools to discover these resources and have clear understanding pricing model of commercial solutions.
 
-\subsubsection{Machine Learning As a Service}
+\subsection{Machine Learning As a Service}
 Current cloud providers rely on machine learning as a service model allowing for efficient use of common resources and use interactive machine learning tools. Machine Learning As a Service is not yet widely used in HEP, but examples of successful publications which used Machine Learning As a Service exist, e.g.~\cite{Aaij:2014azz}. Specialized HEP services for interactive analysis, such as CERN's Service for Web-based Analysis (SWAN) may play an important role in adoption of machine learning tools in HEP workflows. In order to use these tools more efficiently, sufficient and appropriately tailored hardware resources  described in this chapter are needed.
 
 
