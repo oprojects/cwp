@@ -64,10 +64,8 @@ arXiv: realclean document
 	mkdir submit_to_arXiv
 	cp *.tex submit_to_arXiv
 	cp *.bbl submit_to_arXiv/ms.bbl
-	cp Makefile submit_to_arXiv
 	cp -r src bib images submit_to_arXiv
 	mv submit_to_arXiv/HSF_ML_CWP.tex submit_to_arXiv/ms.tex
-	sed -i 's/HSF_ML_CWP/ms/g' submit_to_arXiv/Makefile
 	sed -i '/hyperref/,+7d' submit_to_arXiv/preamble.tex
 	tar -zcvf submit_to_arXiv.tar.gz submit_to_arXiv
 	rm -rf submit_to_arXiv
