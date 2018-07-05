@@ -4,7 +4,7 @@
 
 
 \subsection{Introduction}
-In this chapter we discuss the roadmap towards implementation of the research and development areas described in section \ref{sec:applications}.
+In this chapter we discuss the roadmap towards implementation of the research and development areas described in Section~\ref{sec:applications}.
 
 \subsection{Timeline}
 The incorporation of machine learning into particle physics experiments must respect two time lines: the schedule of HL-LHC and funding agencies, and the experiments' need for extensive validation of the algorithms.
@@ -15,7 +15,7 @@ The current LHC schedule has Run 3 starting in 2021 and the HL-LHC starting in 2
 %
 
 \subsection{Steps to Deployment}
-The path of taking a machine learning idea from conception to community-wide acceptance and deployment will entail several stages, as appropriate. There are ample opportunities to make the process more efficient. For example, in many steps having common data sets, as discussed in Section \ref{subsec:benchmark} will likely accelerate the progress.
+The path of taking a machine learning idea from conception to community-wide acceptance and deployment will entail several stages, as appropriate. There are ample opportunities to make the process more efficient. For example, in many steps having common data sets, as discussed in Section~\ref{subsec:benchmark} will likely accelerate the progress.
 
 \begin{enumerate}
  \item \textbf{Problem formulation and data set preparation}: Problem formulation is the first step in building a machine learning algorithm. The inputs and desired output need to be established. The training and validation data sets must be identified and simulated. In many cases, these data sets are large, and resources must be identified to possibly create and store the data. In most cases, the data needs to be processed into a form suitable for input into the algorithm. Since these steps are often lengthy, common data sets with well-defined problems will be very helpful
@@ -25,11 +25,11 @@ The path of taking a machine learning idea from conception to community-wide acc
  \item \textbf{Integration and Validation}: The solution needs to be incorporated into the experimental software and work-flow and validated
 \end{enumerate}
 
-As an example, consider the simulation physics driver. An effort has recently started to build generative models that can significantly accelerate simulation of particle showers in calorimeters. These early efforts are based on simplified data sets specifically created for this problem, without the complications of realistic data and limited to a small section of calorimeters. The first papers\cite{Paganini:2017hrr} use generative adversarial networks to generate calorimetric data which are reasonably faithful but still require tuning. The next step involves exploration of neural network architectures and systematic hyper-parameter scans on HPCs to achieve the required performance. The technique can be applied to several possible searches at LHC that involve boosted objects, where simulation samples require full GEANT-based simulation and are therefore limited in statistics due to resource limitations.
+As an example, consider the simulation physics driver. An effort has recently started to build generative models that can significantly accelerate simulation of particle showers in calorimeters. These early efforts are based on simplified data sets specifically created for this problem, without the complications of realistic data and limited to a small section of calorimeters. The first papers~\cite{Paganini:2017hrr} use generative adversarial networks to generate calorimetric data which are reasonably faithful but still require tuning. The next step involves exploration of neural network architectures and systematic hyper-parameter scans on HPCs to achieve the required performance. The technique can be applied to several possible searches at LHC that involve boosted objects, where simulation samples require full GEANT-based simulation and are therefore limited in statistics due to resource limitations.
 
 The process of employing the new technique in a publication will elicit scrutiny by the full experiment, effectively validating the technique. Once the technique is accepted, it can be generalized beyond this first application and then incorporated into the experiment's software for use by others. Finally, as the technique is applied to an increasing number of physics analyses, the technique will be incorporated into the experiment's production work-flows.
 
-A similar deployment and integration model can be applied to all the major research and development ideas described in chapter \ref{sec:applications}.
+A similar deployment and integration model can be applied to all the major research and development ideas described in chapter~\ref{sec:applications}.
 
 
 

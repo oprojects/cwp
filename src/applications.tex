@@ -187,13 +187,13 @@ New physics may manifest itself as unusual or rare events. One approach is to ac
 
 The theoretical physics community has a number of challenges where machine learning can make an impact. These include areas of theoretical model optimization with hundreds of parameters, searches for new models,  understanding and estimation of the parton distribution functions and possibly quantum machine learning. The following details one such application: learning of the parton distribution functions with machine learning.
 
-Making progress towards the objectives of the HL-LHC program (see section \ref{sec:introduction}) requires not only
+Making progress towards the objectives of the HL-LHC program (see Section~\ref{sec:introduction}) requires not only
 obtaining the experimental measurements of the physical processes but also reliable theory inputs to compare to. This becomes increasingly challenging as the experimental data gets more precise. There are numerous examples of phenomenologically relevant processes where the experimental uncertainty is comparable to the estimate of the theoretical uncertainty of the corresponding calculation.
 
 Furthermore, the theory does not predict the value of all the inputs required for the computations (for example the
 value of the strong coupling constant $\alpha_S$ at the $Z$ mass), and there are situations where the equations
 resulting from theory cannot be solved to describe the physics adequately, and the corresponding theory inputs must be obtained from data instead. A more complex example is the determination of Parton Distribution Functions (PDFs): Quantum Chromodynamics (QCD) describes the proton collisions at high energy in terms of \emph{partons} (e.g. quarks and gluons), but it is not possible to calculate directly from QCD the momentum carried by each quark or gluon within a proton since QCD is not solvable in its confined regime. Our lack of theoretical knowledge about the characterization of
-partons within a proton is embedded into a suitable definition of the Parton Distribution Functions (approximately the momentum densities of each of the partons) The PDFs then need to be determined from experimental data. The NNPDF collaboration uses Machine Learning techniques to obtain a PDF determination that is accurate enough to be suitable for high-precision collider data comparison. The NNPDF fitting procedure is described in full details in \cite{Ball:2014uwa}.
+partons within a proton is embedded into a suitable definition of the Parton Distribution Functions (approximately the momentum densities of each of the partons) The PDFs then need to be determined from experimental data. The NNPDF collaboration uses Machine Learning techniques to obtain a PDF determination that is accurate enough to be suitable for high-precision collider data comparison. The NNPDF fitting procedure is described in full details in~\cite{Ball:2014uwa}.
 
 The idea is to combine data from all relevant physical processes and fit a neural network representing each PDF. The difficulty of the procedure steams from the fact that multiple experimental inputs need to be combined to obtain
 a PDF fit. Each of these inputs adjoins only indirect constraints on the PDFs, leaving some regions of the PDF
@@ -214,7 +214,7 @@ In conclusion, it is not only important to obtain the best fit PDF, but also a r
 Until fairly recently, little attention has been paid to the problem of assigning a measure of uncertainty to the output of machine learning algorithms. However, there is a growing recognition that the lack of such measures is a serious deficiency that needs to be addressed. This is particularly problematic in particle physics where accurate uncertainty assignments are crucial for assessing the quality of quantitative results. Uncertainty assignment is especially  urgent if machine learning methods are to be used for regression.
 
 Standard methods exist in the statistics literature to quantify uncertainty when an explicit likelihood function is available. Unfortunately, however, the overlap between the machine learning and statistics communities has been minimal at best. But, the problem of uncertainty offers many opportunities for fruitful collaborations between physicists, statisticians, computer scientists, and machine learning practioners, and is something that ought to be vigorously encouraged.
-One area ripe for collaboration is in the use of Bayesian methods to quantify uncertainty using, for example, Hamiltonian Monte Carlo (HMC) sampling of posterior densities. One serious issue is that HMC is computationally prohibitive for DNNs. Therefore, new, more effective, ways to do large scale Bayesian calculations that go beyond HMC need to be developed, in particular, it would be useful to develop methods that can be take advantage of multicore machines as discussed in section \ref{sec:resources}.
+One area ripe for collaboration is in the use of Bayesian methods to quantify uncertainty using, for example, Hamiltonian Monte Carlo (HMC) sampling of posterior densities. One serious issue is that HMC is computationally prohibitive for DNNs. Therefore, new, more effective, ways to do large scale Bayesian calculations that go beyond HMC need to be developed, in particular, it would be useful to develop methods that can be take advantage of multicore machines as discussed in Section~\ref{sec:resources}.
 
 % and can be summarized as follows:
 
@@ -231,7 +231,7 @@ One area ripe for collaboration is in the use of Bayesian methods to quantify un
 %  the ensemble of neural networks.
 %\end{itemize}
 
-%A different direction of research concerns minimizing the computational expense of the PDF convolutions required to  (i.e. the cost to use the PDF sets). Several tools have been developed to produce reduced but statistically equivalent PDF sets \cite{Carrazza:2016htc, Carrazza:2015aoa, Carrazza:2015hva}, and further steps are required to deliver the  PDFs efficiently encoded in binary form, instead of the text based LHAPDF format \cite{Buckley:2014ana} currently in use.
+%A different direction of research concerns minimizing the computational expense of the PDF convolutions required to  (i.e. the cost to use the PDF sets). Several tools have been developed to produce reduced but statistically equivalent PDF sets~\cite{Carrazza:2016htc, Carrazza:2015aoa, Carrazza:2015hva}, and further steps are required to deliver the  PDFs efficiently encoded in binary form, instead of the text based LHAPDF format~\cite{Buckley:2014ana} currently in use.
 
 
 

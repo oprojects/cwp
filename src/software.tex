@@ -70,13 +70,13 @@ HEP has started to exploring interactive frameworks, such as the Service for Web
 \subsection{Internal and external ML tools}
 %Contributors: Juan Pedro Araque, Nuno Filipe Castro, Thomas Keck, Stefan Wunsch, Igor Lakomov, Konstantin Skazytkin, Luke Kreczko, Przemysław Karpiński, Claire David, Hans Pabst, Attilio Picazio, Giles Strong, Gordon Watts, Lorenzo Moneta, Matthew Feickert, Mark Neubauer, Daniele Bonacorsi, Mauro Verzetti, Seth Moortgat, Sergei Gleyzer, Fernanda Psihas, Elias Coniavitis, Gilles Louppe, Kim Albertsson, Steven Schramm, Martin Erdmann
 
-% In section~\ref{sec:data_formats} we provide a high-level overview of existing HEP and ML data formats. Section~\ref{sec:ml_tools} investigates the present ML software landscape in HEP, while section~\ref{sec:tool_roadmap} proposes a road-map towards a sustainable future HEP machine learning software landscape.
+% In Section~\ref{sec:data_formats} we provide a high-level overview of existing HEP and ML data formats. Section~\ref{sec:ml_tools} investigates the present ML software landscape in HEP, while Section~\ref{sec:tool_roadmap} proposes a road-map towards a sustainable future HEP machine learning software landscape.
 
-Internally developed ML software, such as the Toolkit for Multivariate Analysis (TMVA, \cite{TMVA}), have been developed to apply a variety of machine learning algorithms to HEP challenges. Currently, most published HEP analyses with machine learning have made use of TMVA. There is also software developed in HEP, such as NeuroBayes\cite{neurobayes,neurobayes2} and RuleFit, that have gained popularity outside of HEP.
+Internally developed ML software, such as the Toolkit for Multivariate Analysis (TMVA,~\cite{TMVA}), have been developed to apply a variety of machine learning algorithms to HEP challenges. Currently, most published HEP analyses with machine learning have made use of TMVA. There is also software developed in HEP, such as NeuroBayes~\cite{neurobayes,neurobayes2} and RuleFit, that have gained popularity outside of HEP.
 
 At the same time, the ML landscape has evolved and many different ML tools have emerged and gained popularity. There is a growing number of published results based on externally developed tools. The latter, often developed directly by industry for specific applications, are constantly undergoing development, incorporating the latest algorithms from academia. Currently, both internal and external tools are used by the HEP community. TMVA has also undergone significant development in recent years.
 
-In addition, there are smaller tools developed in the HEP community, extending either internal or external ML tools for specific use cases and applications within HEP experiments, such as \texttt{hep\_ml} \cite{hep_ml} or \texttt{tmva-branch-adder} \cite{tmva-branch-adder}.
+In addition, there are smaller tools developed in the HEP community, extending either internal or external ML tools for specific use cases and applications within HEP experiments, such as \texttt{hep\_ml}~\cite{hep_ml} or \texttt{tmva-branch-adder}~\cite{tmva-branch-adder}.
 
 This begs the question: what aspects of ML development and use should the HEP community focus on in the next 5-10 years? There are several aspects to consider including data formats, community size, and interfaces.
 
@@ -132,12 +132,12 @@ HEP and ML communities currently make use of different data formats. HEP heavily
 
 A desirable data format should have the following attributes: high read-write speed for efficient training, sparse readability without loading entire dataset into RAM, compression and common use by the machine learning community.
 
-HEP machine learning applications require high performance and flexible algorithms to address the variety of use cases. Some applications, such as triggering, also have to work under tight latency constraints of the order of a few microseconds and below. The data sets are extremely large, which comes with I/O challenges described in section~\ref{sec:software_IO}. This is expected to become even more challenging, as the LHC continues to ramp-up and deliver increasingly large amounts of data.
+HEP machine learning applications require high performance and flexible algorithms to address the variety of use cases. Some applications, such as triggering, also have to work under tight latency constraints of the order of a few microseconds and below. The data sets are extremely large, which comes with I/O challenges described in Section~\ref{sec:software_IO}. This is expected to become even more challenging, as the LHC continues to ramp-up and deliver increasingly large amounts of data.
 
 %All of these constitute requirements on ML tools used by the HEP community.
 
 %There are further requirements. The HEP community, for example, is looking to elevate Python to a first class library.
-As discussed in section ~\ref{sec:software_proglang}, Machine Learning tools use a number of languages. To use them it will be important to offer adequate support. C++ converters or similar tools are also needed to make sure the training result can be efficiently evaluated.
+As discussed in Section~\ref{sec:software_proglang}, Machine Learning tools use a number of languages. To use them it will be important to offer adequate support. C++ converters or similar tools are also needed to make sure the training result can be efficiently evaluated.
 
 Advantages of using the {\bf external tools} are the size of the community that uses and supports them, being able to easily keep up with progress in the industry and profit from the forefront of the ML research.
 
@@ -162,27 +162,27 @@ Existing middleware solutions are shown in Table~\ref{table:Middleware}.
  \begin{center}
   \begin{tabular}{|l|l|}
    \hline
-   {\bf PyROOT}       & Python extension module that allows the user to interact with ROOT data/classes \cite{PyROOT}.          \\
+   {\bf PyROOT}       & Python extension module that allows the user to interact with ROOT data/classes~\cite{PyROOT}.          \\
    \hline
-   {\bf root\_numpy}  & The interface between ROOT and NumPy supported by the Scikit-HEP community \cite{root_numpy}.           \\
+   {\bf root\_numpy}  & The interface between ROOT and NumPy supported by the Scikit-HEP community~\cite{root_numpy}.           \\
    \hline
-   {\bf root\_pandas} & The interface between ROOT and Pandas dataframes supported by the DIANA/HEP project \cite{root_pandas}. \\
+   {\bf root\_pandas} & The interface between ROOT and Pandas dataframes supported by the DIANA/HEP project~\cite{root_pandas}. \\
    \hline
-   {\bf uproot}       & A high throughput I/O interface between ROOT and NumPy \cite{uproot}.                                   \\
+   {\bf uproot}       & A high throughput I/O interface between ROOT and NumPy~\cite{uproot}.                                   \\
    \hline
    {\bf c2numpy}      & Pure C-based code to convert ROOT data into Numpy arrays                                                \\
-                      & which can be used in C/C++ frameworks \cite{c2numpy}.                                                   \\
+                      & which can be used in C/C++ frameworks~\cite{c2numpy}.                                                   \\
    \hline
 
    {\bf root4j}       & The hep.io.root package contains a simple Java interface for reading ROOT files.                        \\
-                      & This tool has been developed based on freehep-rootio \cite{root4j}.                                     \\
+                      & This tool has been developed based on freehep-rootio~\cite{root4j}.                                     \\
    \hline
 
    {\bf root2npy}     & The \texttt{go-hep} package contains a reading ROOT files.                                              \\
-                      & This tool has been developed based on freehep-rootio \cite{root4j}.                                     \\
+                      & This tool has been developed based on freehep-rootio~\cite{root4j}.                                     \\
    \hline
 
-   {\bf root2hdf5}    & Converts ROOT files containing TTrees into HDF5 files containing HDF5 tables \cite{root2hdf5}.          \\
+   {\bf root2hdf5}    & Converts ROOT files containing TTrees into HDF5 files containing HDF5 tables~\cite{root2hdf5}.          \\
    \hline
   \end{tabular}
  \end{center}
