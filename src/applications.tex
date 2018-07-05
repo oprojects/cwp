@@ -166,7 +166,9 @@ What could one do with these parameterized simulated events? One could take adva
 This result was derived in the context of neural networks. However, it is in fact entirely independent of the nature of the function
 $f(x, \omega)$.
 
-We can exploit this result to approximate $\mathcal{P}_{\xi}({\bf x}|{\boldsymbol\alpha})$ directly using, for example, DNNs. For each simulated event, in the training set, one could sample $\boldsymbol{\alpha}$ from a known distribution $q(\boldsymbol{\alpha})$, thereby yielding an ensemble of triplets $\{ ({\bf x}, \boldsymbol{\alpha}, w(\boldsymbol{\alpha}, \boldsymbol{\alpha}_0)) \}$. Call this ensemble the ``signal". Sample ${\bf x}$ from another known distribution $p({\bf x})$ and for each ${\bf x}$ sample $\boldsymbol{\alpha}$ from $q(\boldsymbol{\alpha})$. Call the ensemble of pairs $\{({\bf x}, \boldsymbol{\alpha})\}$ the ``background". From Eq.~(\ref{eqn:discriminant}), we have
+We can exploit this result to approximate $\mathcal{P}_{\xi}({\bf x}|{\boldsymbol\alpha})$ directly using, for example, DNNs. For each simulated event, in the training set, one could sample $\boldsymbol{\alpha}$ from a known distribution $q(\boldsymbol{\alpha})$, thereby yielding an ensemble of triplets $\{ ({\bf x}, \boldsymbol{\alpha}, w(\boldsymbol{\alpha}, \boldsymbol{\alpha}_0)) \}$. Call this ensemble the ``signal''.
+Sample ${\bf x}$ from another known distribution $p({\bf x})$ and for each ${\bf x}$ sample $\boldsymbol{\alpha}$ from $q(\boldsymbol{\alpha})$. Call the ensemble of pairs $\{({\bf x}, \boldsymbol{\alpha})\}$ the ``background''.
+From Eq.~(\ref{eqn:discriminant}), we have
 \begin{align}
  f(x, \omega) & = \frac{s({\bf x}, \boldsymbol{\alpha})}{s({\bf x}, \boldsymbol{\alpha}) + p({\bf x}) q(\boldsymbol{\alpha})},
 \end{align}
