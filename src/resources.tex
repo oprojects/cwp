@@ -62,14 +62,15 @@ In order to make the best use of resources available to the community, all resou
 \subsection{Data Storage and Availability}
 Data storage limitations will have a major impact on machine learning applications. Presently, to train machine learning algorithms, it has been possible to take advantage of increases in statistics of Monte-Carlo simulated events needed for other use cases. Further machine learning progress may require more simulated data than what is available today. How to produce and store these additional large amounts of data is a challenge that needs to be overcome.\\
 
-Availability of data at PByte/EByte scale represents another challenge for ML community. A good solution must provide access to a large data volume for hundred or thousand of users simultaneously. As discussed in the Data Storage chapter~[reference], data movement might need to be automatized to make the training data available transparently at high speed local storage with use of automatic caching mechanism. The success of Apache Spark and Google BigQuery platforms may serve as a model. Data streaming, transformation and readout in mini-batches may be required to train models over large data sets. This is in addition to the regular HEP workflows described in the Data Storage and Networking chapter~[reference].
-
+Availability of data at PByte/EByte scale represents another challenge for ML community.
+A good solution must provide access to a large data volume for hundred or thousand of users simultaneously.
+Additionally, data movement might need to be automatized to make the training data available transparently at high speed local storage with use of automatic caching mechanism.
+The success of Apache Spark and Google BigQuery platforms may serve as a model.
+In addition to the regular HEP workflows, data streaming, transformation and readout in mini-batches may be required to train models over large data sets.
 
 \subsection{Software Distribution and Deployment}
 To efficiently use the resources described in previous subsections, machine learning software needs to be available on the computing resources. Platforms, such as CERNVM File System (cvmfs), are very useful for software distribution that does not require local installation. Additional tools like docker containers for application shipping can be useful in providing homogeneous software environments across the different systems. Another challenge is that the software layer needs to be agnostic to the hardware back-end.
-
 % %Issues are sometimes with the needs for synchronization of various versions of software, point at which the use of self-consistent container is indeed more practical.
-
 %At the same time we need tools to discover these resources and have clear understanding pricing model of commercial solutions.
 
 \subsection{Machine Learning As a Service}
