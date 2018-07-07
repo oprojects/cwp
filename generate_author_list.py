@@ -38,9 +38,9 @@ if __name__ == '__main__':
         out_file.write(latex_file_string)
 
     # Add the editors
-    editors = [author for author in authors if author['last_name'] in ['Gleyzer', 'Seyfert', 'Schramm']]
-    # Have order be Gleyzer, Seyfert, Schramm
-    editors = [editors[0], editors[2], editors[1]]
+    editors = [author for author in authors if author['last_name'] in ['Feickert', 'Gleyzer', 'Seyfert', 'Schramm']]
+    # Have order be Gleyzer, Seyfert, Schramm, Feickert
+    editors = [editors[1], editors[3], editors[2], editors[0]]
     editors_string = '\\textbf{Editors}:'
     for editor in editors:
         editors_string += ' ' + str(editor['first_name']) + ' ' + str(editor['last_name']) + \
