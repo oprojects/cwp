@@ -31,7 +31,7 @@ jobs:
               if [[ ! -z $CIRCLE_PULL_REQUEST ]]; then
                 SSHPASS=$LXPLUS_PASS sshpass -e scp HSF_ML_CWP.pdf feickert@lxplus.cern.ch:/eos/user/f/feickert/www/IML-CWP/PRs/draft_ml-cwp_PR${CIRCLE_PULL_REQUEST##*/}.pdf
                 echo "### File viewable at: https://cern.ch/feickert/IML-CWP/PRs/draft_ml-cwp_PR${CIRCLE_PULL_REQUEST##*/}.pdf"
-              else
+              elif [[ "$CIRCLE_BRANCH" == "master" ]]; then
                 SSHPASS=$LXPLUS_PASS sshpass -e scp HSF_ML_CWP.pdf feickert@lxplus.cern.ch:/eos/user/f/feickert/www/IML-CWP/draft_ml-cwp.pdf
                 echo "### File viewable at: https://cern.ch/feickert/IML-CWP/draft_ml-cwp.pdf"
               fi
